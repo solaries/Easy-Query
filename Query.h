@@ -1,0 +1,6 @@
+#ifndef QUERY_H_INCLUDED
+#define QUERY_H_INCLUDED
+
+
+
+#endif // QUERY_H_INCLUDED

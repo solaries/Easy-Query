@@ -1,0 +1,6 @@
+#ifndef DELETE_H_INCLUDED
+#define DELETE_H_INCLUDED
+
+
+
+#endif // DELETE_H_INCLUDED

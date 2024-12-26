@@ -1,0 +1,6 @@
+#ifndef DATATYPE_H_INCLUDED
+#define DATATYPE_H_INCLUDED
+
+
+
+#endif // DATATYPE_H_INCLUDED
