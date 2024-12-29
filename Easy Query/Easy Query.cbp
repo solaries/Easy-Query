@@ -11,9 +11,14 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
+				<Linker>
+					<Add library="ncurses" />
+					<Add library="form" />
+				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/Easy Query" prefix_auto="1" extension_auto="1" />
@@ -31,6 +36,126 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="Connect_To_Database.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Connect_To_Database.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Create_Database.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Create_Database.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Create_Table.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Create_Table.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Datatype.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Datatype.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Delete.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Delete.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Field.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Field.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Foreign_Key.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Foreign_Key.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Form.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Form.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Insert.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Insert.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Main_Menu_List.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Main_Menu_list.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Menu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Menu.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Panel.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Panel.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Query.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Query.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Result_Text_Or_Cells.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Result_Text_Or_Cells.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Select.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Select.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Server_Connection.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Server_Connection.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Table.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Table.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Table_Field.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Table_Field.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Unique.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Unique.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Update.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Update.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
