@@ -268,9 +268,50 @@ int main()
 			default:
 
 			{
+			// form_driver(my_form, REQ_INS_CHAR);
                     /* If this is a normal character, it gets */
                     /* Printed				  */
-                    if((ch >=33 && ch <=126)){
+                    if((ch >=32 && ch <=126)){
+                        bool doMovenext = false;
+                        if(charCur < charCount){
+                            doMovenext = true;
+                            form_driver(my_form, REQ_VALIDATION);
+                            //mvprintw(19, 0, " " );
+                            //form_driver(my_form, '\0');
+
+
+                            char dest[20];
+
+                            char * theTextCurrent= field_buffer(field[1], 0) ;
+                            char theText[charCount  + 2];
+                            int j =0;
+                            for(int i =0;i < charCount+1;i++){
+                                if(i==charCur-1){
+                                    theText[i] = ch;
+                                    i++;
+                                }
+                               theText[i] = theTextCurrent[j];
+                                j++;
+                            }
+                            theText[charCount +1  ] = '\0';
+                            //theText[0] = 65;
+                            mvprintw(18, 0, "%s",theText);
+                            mvprintw(19, 0, "in the mix                                                                                                                          " );
+                            set_field_buffer(field[1], 0, theText);
+
+                            for (int i = 1; i < colCur     ;i++){
+                                form_driver(my_form, REQ_NEXT_CHAR);
+                            }
+
+//                    charCur +=1;
+
+
+                            //REQ_OVL_MODE
+                            //REQ_INS_MODE
+                            //REQ_INS_LINE
+                            //form_driver(my_form, REQ_INS_CHAR);
+                            //charCur--;
+                        }
                         charCount +=1;
                         charCur +=1;
                         rowCur = ((charCur -1) / colSize) + 1  ;
@@ -279,8 +320,12 @@ int main()
                             colCur = colSize;
                         }
                         else{
-                            colCur = ((charCur ) % colSize)  ;
+                            colCur = ((charCur ) % colSize);
                         }
+                        if(doMovenext){
+                            form_driver(my_form, REQ_NEXT_CHAR );
+                        }
+
                     }
                     mvprintw(20, 0, "Item selected is : %d ", ch);
                     mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d ,",   rowCount , charCount ,rowCur  , colCur,charCur );
@@ -290,9 +335,7 @@ int main()
                     //}
                     //else{
                     form_driver(my_form, ch);
-
                     //}
-
 			}
 				break;
 		}
