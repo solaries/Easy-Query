@@ -299,6 +299,9 @@ int main()
                             mvprintw(19, 0, "in the mix                                                                                                                          " );
                             set_field_buffer(field[1], 0, theText);
 
+                            for (int i = 1; i < rowCur     ;i++){
+                                form_driver(my_form, REQ_NEXT_LINE);
+                            }
                             for (int i = 1; i < colCur     ;i++){
                                 form_driver(my_form, REQ_NEXT_CHAR);
                             }
