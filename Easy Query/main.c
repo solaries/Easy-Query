@@ -74,6 +74,12 @@ int main()
 	FIELD *field[3];
 	FORM  *my_form;
 	int ch;
+	int colSize = 4;
+	int rowCount = 1;
+	int charCount = 0;
+	int rowCur = 1;
+	int colCur = 1;
+	int charCur = 1;
 
 	/* Initialize curses */
 	initscr();
@@ -89,7 +95,7 @@ int main()
 	/* Initialize the fields */
 //height, width, starty, startx, number of offscreen rows and number of additional working buffers
 	field[0] = new_field(1, 10, 4, 18, 0, 0);
-	field[1] = new_field(5, 4, 6, 20, 0, 0);
+	field[1] = new_field(5, colSize, 6, 20, 0, 0);
 	field[2] = NULL;
 
 	/* Set field options */
@@ -130,6 +136,8 @@ int main()
 	//set_field_buffer(field[1], 0, "val1\1");
 
 	mvprintw(LINES - 2, 0, "Use UP, DOWN arrow keys to switch between fields");
+
+    mvprintw(21, 0, "col size: %d ,row count: %d ,char count: %d ,row current: %d ,col Current: %d ,", colSize , rowCount , charCount ,rowCur  , colCur );
 	refresh();
 
 //set_field_pad (field[1],'\0');
@@ -145,91 +153,30 @@ int main()
 				//form_driver(my_form, REQ_END_LINE);
 				break;
             case KEY_DOWN:
-				/* Go to next field */
-
-/*#define REQ_NEXT_LINE	 (KEY_MAX + 19)	 move to next line in field
-#define REQ_PREV_LINE	 (KEY_MAX + 20)	 */
-				//form_driver(my_form, REQ_NEXT_FIELD);
-
-
-
-
                 {
-
-                    //field_buffer(field[1], 0)[1] = 65;
-//                    char* v = trim_whitespaces(field_buffer(field[1], 0));
-
-//                    mvprintw(16, 0, "Item selected is : %d  %d  %d  %d  %d  %d  %d  %d  %d -> %d "
-//                    , v[0]
-//                    , v[1]
-//                    , v[2]
-//                    , v[3]
-//                    , v[4]
-//                    , v[5]
-//                    , v[6]
-//                    , v[7]
-//                    , v[8]
-//                    , strnlen(field_buffer(field[1], 0), 128)
-//                     );
-
-                    int startY =0 , startX  =0;
-                    int downY =0 , downX  =0;
-
-
-                    getCoord(13,field[1],  &startY, &startX );
-
-
-//                    mvprintw(12, 0, "xxx : %d  %d  "
-//                    , downY
-//                    , downX
-//                     );
-
-
-                      form_driver(my_form, REQ_NEXT_LINE);
-
-                    getCoord(14,field[1],  &downY, &downX);
-
-
-
-                    int endY =0 , endX  =0;
-
-         form_driver(my_form, REQ_END_FIELD );
-
-                    getCoord(16,field[1],  &endY, &endX);
-
-                    if(endY > downY){
-                        for (int i = 0; i < endY - downY;i++){
-                            form_driver(my_form, REQ_PREV_LINE);
+                    if(rowCur < rowCount){
+                        charCur +=4;
+                        rowCur +=1;
+                        //rowCur = ((charCur  -1 )/ colSize) + 1 ;
+                        if((charCur    )% colSize ==0){
+                            colCur = colSize;
                         }
-                    }
-
-                     form_driver(my_form, REQ_END_LINE );
-
-                    getCoord(15,field[1],    &endY, &endX);
-                    if(endX > startX){
-                        form_driver(my_form, REQ_BEG_LINE );
-                        getCoord(15,field[1],    &endY, &endX);
-                        form_driver(my_form, REQ_NEXT_CHAR);
-                        for (int i = 0; i < startX- endX    ;i++){
+                        else{
+                            colCur = ((charCur   ) % colSize)  ;
+                        }
+                        mvprintw(19, 0, "                                                                                                                          "  );
+                        mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d ,",   rowCount , charCount ,rowCur  , colCur,charCur );
+                        form_driver(my_form, REQ_NEXT_LINE );
+                        for (int i = 1; i < colCur     ;i++){
                             form_driver(my_form, REQ_NEXT_CHAR);
                         }
                     }
+                    else{
+                        mvprintw(19, 0, "no move down                                                                                                                "  );
+                    }
 
-
-
-                form_driver(my_form, '\0');
-            //int   *prows =0, *pcols=0, *pmax=0;
-
-         // dynamic_field_info(field[1],  prows, pcols, pmax);
-
-         //form_driver(my_form, REQ_END_FIELD );
-                    //form_driver(my_form, REQ_NEXT_LINE);
-
-                    //form_driver(my_form, REQ_END_LINE );
-
+                    form_driver(my_form, '\0');
                 }
-
-
 				/* Go to the end of the present buffer */
 				/* Leaves nicely at the last character */
 				//form_driver(my_form, REQ_END_LINE);
@@ -238,65 +185,115 @@ int main()
 			case KEY_UP:
 				/* Go to previous field */
 				//form_driver(my_form, REQ_PREV_FIELD);
-				form_driver(my_form, REQ_PREV_LINE);
-				//mvprintw(20, 0, "Item selected is : %d ", ch);
+                {
+                    if(rowCur > 1){
+                        charCur -=4;
+                        rowCur -=1;
+                        //rowCur = ((charCur  -1 )/ colSize) + 1 ;
+                        if((charCur    )% colSize ==0){
+                            colCur = colSize;
+                        }
+                        else{
+                            colCur = ((charCur   ) % colSize)  ;
+                        }
+                        mvprintw(19, 0, "                                                                                                                          "  );
+                        mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d ,",   rowCount , charCount ,rowCur  , colCur,charCur );
+                        form_driver(my_form, REQ_PREV_LINE );
+
+                        for (int i = 1; i < colCur     ;i++){
+                            form_driver(my_form, REQ_NEXT_CHAR);
+                        }
+                    }
+                    else{
+                        mvprintw(19, 0, "no move up                                                                                                                "  );
+                    }
+                    form_driver(my_form, '\0');
+                }
+
 				break;
 			case KEY_LEFT:
-                form_driver(my_form, REQ_NEW_LINE );
-                form_driver(my_form, REQ_PREV_CHAR );
+                //form_driver(my_form, REQ_NEW_LINE );
+                if(charCur > 1){
+                    charCur -=1;
+                    rowCur = ((charCur  -1 )/ colSize) + 1 ;
+                    if((charCur    )% colSize ==0){
+                        colCur = colSize;
+                    }
+                    else{
+                        colCur = ((charCur   ) % colSize)  ;
+                    }
+                    mvprintw(19, 0, "                                                                                                                          "  );
+                    mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d ,",   rowCount , charCount ,rowCur  , colCur,charCur );
+                    form_driver(my_form, REQ_PREV_CHAR );
+                }
+                else{
+                    mvprintw(19, 0, "no move back                                                                                                                "  );
+                }
+                form_driver(my_form, '\0');
+
 				break;
 			case KEY_DC:
                 form_driver(my_form,  REQ_DEL_CHAR );
 				break;
-			case 360:
-                form_driver(my_form, REQ_END_FIELD );
-                //form_driver(my_form, REQ_NEXT_CHAR );
-				break;
+//			case 360:
+//                form_driver(my_form, REQ_END_FIELD );
+//                //form_driver(my_form, REQ_NEXT_CHAR );
+//				break;
 			case KEY_RIGHT:
 
                 {
-
+                if(charCur <= charCount){
+                    charCur +=1;
+                    rowCur = ((charCur  -1 )/ colSize) + 1 ;
+                    if((charCur    )% colSize ==0){
+                        colCur = colSize;
+                    }
+                    else{
+                        colCur = ((charCur   ) % colSize)  ;
+                    }
+                    mvprintw(19, 0, "                                                                                                                          "  );
+                    mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d ,",   rowCount , charCount ,rowCur  , colCur,charCur );
                     form_driver(my_form, REQ_NEXT_CHAR );
-//                    char* v = trim_whitespaces(field_buffer(field[1], 0));
-                    char* v =   field_buffer(field[1], 0);
-
-                    mvprintw(16, 0, "Item selected is : %d  %d  %d  %d  %d  %d  %d  %d  %d -> %d "
-                    , v[0]
-                    , v[1]
-                    , v[2]
-                    , v[3]
-                    , v[4]
-                    , v[5]
-                    , v[6]
-                    , v[7]
-                    , v[8]
-                    , strnlen(field_buffer(field[1], 0), 128)
-                     );
-//                    form_driver(my_form, REQ_END_FIELD );
-//                    form_driver(my_form, REQ_NEXT_CHAR );
-
-
+                }
+                else{
+                    mvprintw(19, 0, "no move forward                                                                                                                "  );
+                }
                 form_driver(my_form, '\0');
                 }
-
-                //form_driver(my_form, REQ_NEXT_CHAR );
 				break;
 			case KEY_BACKSPACE:
 				/* Go to previous field */
                 form_driver(my_form, REQ_DEL_PREV);
 				break;
 			default:
-				/* If this is a normal character, it gets */
-				/* Printed				  */
-                mvprintw(20, 0, "Item selected is : %d ", ch);
-                //if(ch == 263){
-                    //mvprintw(20, 0, "Item selected is : %d ", ch);
-                 //               form_driver(my_form, REQ_DEL_PREV);
-                //}
-                //else{
-                form_driver(my_form, ch);
 
-                //}
+			{
+                    /* If this is a normal character, it gets */
+                    /* Printed				  */
+                    if((ch >=33 && ch <=126)){
+                        charCount +=1;
+                        charCur +=1;
+                        rowCur = ((charCur -1) / colSize) + 1  ;
+                        rowCount = (charCount / colSize) +1  ;
+                        if((charCur   )% colSize ==0){
+                            colCur = colSize;
+                        }
+                        else{
+                            colCur = ((charCur ) % colSize)  ;
+                        }
+                    }
+                    mvprintw(20, 0, "Item selected is : %d ", ch);
+                    mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d ,",   rowCount , charCount ,rowCur  , colCur,charCur );
+                    //if(ch == 263){
+                        //mvprintw(20, 0, "Item selected is : %d ", ch);
+                     //               form_driver(my_form, REQ_DEL_PREV);
+                    //}
+                    //else{
+                    form_driver(my_form, ch);
+
+                    //}
+
+			}
 				break;
 		}
 	}

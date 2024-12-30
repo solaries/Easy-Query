@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1735510949 source:/home/sphinx/code/c_programs/easy_query/Easy Query/main.c
+1735581282 source:/home/sphinx/code/c_programs/easy_query/Easy Query/main.c
 	<stdio.h>
 	<stdlib.h>
 	"Connect_To_Database.h"
@@ -92,7 +92,7 @@
 1735242336 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Foreign_Key.c
 	"Foreign_Key.h"
 
-1735308138 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Form.c
+1735512957 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Form.c
 	"Form.h"
 
 1735242262 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Insert.c
