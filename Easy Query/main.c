@@ -29,43 +29,43 @@
 #include <ctype.h>
 
 
-static void getCoord(int pos,FIELD *field, int* downY,int* downX){
-    int temp_x, temp_y;
-                    getyx(stdscr,  temp_y,  temp_x);
-//    getyx(stdscr, &temp_y, &temp_x);
-    *downX = temp_x;
-    *downY = temp_y;
+//static void getCoord(int pos,FIELD *field, int* downY,int* downX){
+//    int temp_x, temp_y;
+//                    getyx(stdscr,  temp_y,  temp_x);
+////    getyx(stdscr, &temp_y, &temp_x);
+//    *downX = temp_x;
+//    *downY = temp_y;
+//
+//                    mvprintw(pos, 0, "after down : %d  %d    "
+//                    , temp_y
+//                    , temp_x
+//                     );
+//
+//
+//}
 
-                    mvprintw(pos, 0, "after down : %d  %d    "
-                    , temp_y
-                    , temp_x
-                     );
-
-
-}
-
-static char* trim_whitespaces(char *str)
-{
-	char *end;
-
-	// trim leading space
-	while(isspace(*str))
-		str++;
-
-	if(*str == 0) // all spaces?
-		return str;
-
-	// trim trailing space
-	end = str + strnlen(str, 128) - 1;
-
-	while(end > str && isspace(*end))
-		end--;
-
-	// write new null terminator
-	*(end+1) = '\0';
-
-	return str;
-}
+//static char* trim_whitespaces(char *str)
+//{
+//	char *end;
+//
+//	// trim leading space
+//	while(isspace(*str))
+//		str++;
+//
+//	if(*str == 0) // all spaces?
+//		return str;
+//
+//	// trim trailing space
+//	end = str + strnlen(str, 128) - 1;
+//
+//	while(end > str && isspace(*end))
+//		end--;
+//
+//	// write new null terminator
+//	*(end+1) = '\0';
+//
+//	return str;
+//}
 
 
 int main()
@@ -233,7 +233,61 @@ int main()
 
 				break;
 			case KEY_DC:
-                form_driver(my_form,  REQ_DEL_CHAR );
+                //form_driver(my_form,  REQ_DEL_CHAR );
+
+
+
+                {
+                        if(charCur -1 < charCount && charCur >= 2){
+                            form_driver(my_form, REQ_VALIDATION);
+                            char * theTextCurrent= field_buffer(field[1], 0) ;
+                            char theText[charCount   -1];
+                            int j =0;
+                            for(int i =0;i < charCount+1;i++){
+                                if(i==charCur){
+                            mvprintw(17, 0, "ignore at %d ", i );
+//                                    theText[i] = ch;
+                                    j++;
+                                }
+                                else{
+                                }
+                                theText[i] = theTextCurrent[j];
+                                j++;
+                            }
+                            theText[charCount -1  ] = '\0';
+
+                            mvprintw(18, 0, "                                                                                          " );
+                            mvprintw(18, 0, "%s",theText);
+                            mvprintw(19, 0, "in the delete                                                                                                                          " );
+                            set_field_buffer(field[1], 0, theText);
+
+                            charCount -=1;
+                            charCur -=1;
+                            rowCur = ((charCur -1) / colSize) + 1  ;
+                            rowCount = (charCount / colSize) +1  ;
+                            if((charCur   )% colSize ==0){
+                                colCur = colSize;
+                            }
+                            else{
+                                colCur = ((charCur ) % colSize);
+                            }
+                            for (int i = 1; i < rowCur;i++){
+                                form_driver(my_form, REQ_NEXT_LINE);
+                            }
+                            for (int i = 1; i < colCur;i++){
+                                form_driver(my_form, REQ_NEXT_CHAR);
+                            }
+                            form_driver(my_form, REQ_NEXT_CHAR );
+
+                        }
+                    mvprintw(20, 0, "Item selected is : %d ", ch);
+                    mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d ,",   rowCount , charCount ,rowCur  , colCur,charCur );
+                    form_driver(my_form, 0);
+
+                    }
+
+
+
 				break;
 //			case 360:
 //                form_driver(my_form, REQ_END_FIELD );
@@ -263,7 +317,61 @@ int main()
 				break;
 			case KEY_BACKSPACE:
 				/* Go to previous field */
-                form_driver(my_form, REQ_DEL_PREV);
+                //form_driver(my_form, REQ_DEL_PREV);
+
+
+
+                {
+                        if(charCur -2 < charCount && charCur >= 2){
+                            form_driver(my_form, REQ_VALIDATION);
+                            char * theTextCurrent= field_buffer(field[1], 0) ;
+                            char theText[charCount   -1];
+                            int j =0;
+                            for(int i =0;i < charCount+1;i++){
+                                if(i==charCur-2){
+                            mvprintw(17, 0, "ignore at %d ", i );
+//                                    theText[i] = ch;
+                                    j++;
+                                }
+                                else{
+                                }
+                                theText[i] = theTextCurrent[j];
+                                j++;
+                            }
+                            theText[charCount -1  ] = '\0';
+
+                            mvprintw(18, 0, "                                                                                          " );
+                            mvprintw(18, 0, "%s",theText);
+                            mvprintw(19, 0, "in the backspace                                                                                                                          " );
+                            set_field_buffer(field[1], 0, theText);
+
+                            charCount -=1;
+                            charCur -=1;
+                            rowCur = ((charCur -1) / colSize) + 1  ;
+                            rowCount = (charCount / colSize) +1  ;
+                            if((charCur   )% colSize ==0){
+                                colCur = colSize;
+                            }
+                            else{
+                                colCur = ((charCur ) % colSize);
+                            }
+                            for (int i = 1; i < rowCur;i++){
+                                form_driver(my_form, REQ_NEXT_LINE);
+                            }
+                            for (int i = 1; i < colCur;i++){
+                                form_driver(my_form, REQ_NEXT_CHAR);
+                            }
+//                            form_driver(my_form, REQ_NEXT_CHAR );
+
+                        }
+                    mvprintw(20, 0, "Item selected is : %d ", ch);
+                    mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d ,",   rowCount , charCount ,rowCur  , colCur,charCur );
+                    form_driver(my_form, 0);
+
+                    }
+
+
+
 				break;
 			default:
 
@@ -276,12 +384,6 @@ int main()
                         if(charCur < charCount){
                             doMovenext = true;
                             form_driver(my_form, REQ_VALIDATION);
-                            //mvprintw(19, 0, " " );
-                            //form_driver(my_form, '\0');
-
-
-                            char dest[20];
-
                             char * theTextCurrent= field_buffer(field[1], 0) ;
                             char theText[charCount  + 2];
                             int j =0;
@@ -294,26 +396,15 @@ int main()
                                 j++;
                             }
                             theText[charCount +1  ] = '\0';
-                            //theText[0] = 65;
                             mvprintw(18, 0, "%s",theText);
                             mvprintw(19, 0, "in the mix                                                                                                                          " );
                             set_field_buffer(field[1], 0, theText);
-
                             for (int i = 1; i < rowCur     ;i++){
                                 form_driver(my_form, REQ_NEXT_LINE);
                             }
                             for (int i = 1; i < colCur     ;i++){
                                 form_driver(my_form, REQ_NEXT_CHAR);
                             }
-
-//                    charCur +=1;
-
-
-                            //REQ_OVL_MODE
-                            //REQ_INS_MODE
-                            //REQ_INS_LINE
-                            //form_driver(my_form, REQ_INS_CHAR);
-                            //charCur--;
                         }
                         charCount +=1;
                         charCur +=1;
