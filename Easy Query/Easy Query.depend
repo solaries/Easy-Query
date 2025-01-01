@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1735652506 source:/home/sphinx/code/c_programs/easy_query/Easy Query/main.c
+1735724234 source:/home/sphinx/code/c_programs/easy_query/Easy Query/main.c
 	<stdio.h>
 	<stdlib.h>
 	"Connect_To_Database.h"
@@ -22,6 +22,7 @@
 	"Table_Field.h"
 	"Unique.h"
 	"Update.h"
+	"FieldInfo.h"
 	<form.h>
 	<ncurses.h>
 	<assert.h>
@@ -127,4 +128,6 @@
 
 1735241941 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Update.c
 	"Update.h"
+
+1735722401 /home/sphinx/code/c_programs/easy_query/Easy Query/FieldInfo.h
 
