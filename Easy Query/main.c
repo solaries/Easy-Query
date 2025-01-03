@@ -41,13 +41,13 @@ int main()
     struct AppInfo appInfo;
 
 	int queryFieldSize = 20;
-	FIELD *field[2];
-    field[0] = new_field(5, queryFieldSize, 6, 20, 0, 0);
-    field[1] = NULL;
-	FORM  *my_form = new_form(field);
+	FIELD *queryfield[2];
+    queryfield[0] = new_field(5, queryFieldSize, 6, 20, 0, 0);
+    queryfield[1] = NULL;
+	FORM  *my_form = new_form(queryfield);
 
     appInfo.queryString = "";
-    queryPanel(my_form       , field      , queryFieldSize, &appInfo.queryString);
+    queryPanel(my_form       , queryfield      , queryFieldSize, &appInfo.queryString);
 
 
 
@@ -56,7 +56,7 @@ int main()
 
 	unpost_form(my_form);
 	free_form(my_form);
-	free_field(field[0]);
+	free_field(queryfield[0]);
 	endwin();
     return 0;
 }
