@@ -18,6 +18,7 @@
 				<Linker>
 					<Add library="ncurses" />
 					<Add library="form" />
+					<Add library="panel" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -72,6 +73,7 @@
 		<Unit filename="Field.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="FieldInfo.h" />
 		<Unit filename="Foreign_Key.c">
 			<Option compilerVar="CC" />
 		</Unit>

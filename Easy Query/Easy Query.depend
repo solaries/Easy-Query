@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1735850366 source:/home/sphinx/code/c_programs/easy_query/Easy Query/main.c
+1735941118 source:/home/sphinx/code/c_programs/easy_query/Easy Query/main.c
 	<stdio.h>
 	<stdlib.h>
 	"Connect_To_Database.h"
@@ -24,6 +24,7 @@
 	"Update.h"
 	"FieldInfo.h"
 	<form.h>
+	<panel.h>
 	<ncurses.h>
 	<assert.h>
 	<string.h>
@@ -39,8 +40,9 @@
 
 1735241099 /home/sphinx/code/c_programs/easy_query/Easy Query/Delete.h
 
-1735851985 /home/sphinx/code/c_programs/easy_query/Easy Query/Field.h
+1735940656 /home/sphinx/code/c_programs/easy_query/Easy Query/Field.h
 	<form.h>
+	<panel.h>
 
 1735240432 /home/sphinx/code/c_programs/easy_query/Easy Query/Foreign_Key.h
 
@@ -54,8 +56,9 @@
 
 1735238987 /home/sphinx/code/c_programs/easy_query/Easy Query/Panel.h
 
-1735767103 /home/sphinx/code/c_programs/easy_query/Easy Query/Query.h
+1735940059 /home/sphinx/code/c_programs/easy_query/Easy Query/Query.h
 	<form.h>
+	<panel.h>
 
 1735241265 /home/sphinx/code/c_programs/easy_query/Easy Query/Result_Text_Or_Cells.h
 
@@ -89,9 +92,10 @@
 1735242367 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Delete.c
 	"Delete.h"
 
-1735853603 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Field.c
+1735941028 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Field.c
 	"Field.h"
 	<form.h>
+	<panel.h>
 
 1735242336 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Foreign_Key.c
 	"Foreign_Key.h"
@@ -108,8 +112,12 @@
 1735242140 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Menu.c
 	"Menu.h"
 
-1735242100 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Query.c
+1735940838 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Query.c
 	"Query.h"
+	"Field.h"
+	<form.h>
+	<panel.h>
+	"FieldInfo.h"
 
 1735242058 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Result_Text_Or_Cells.c
 	"Result_Text_Or_Cells.h"

@@ -1,11 +1,12 @@
 #include "Field.h"
 #include <form.h>
+#include <panel.h>
 
 
-void manageField(FORM  *my_form,FIELD** field, int theColSize, char *queryString[]){
+void manageField( WINDOW *my_form_win, FORM  *my_form,FIELD** field, int theColSize, char *queryString[]){
 
 
-    mvprintw(15, 0, "%s -", *queryString );
+    //mvprintw(15, 0, "%s -", *queryString );
 
 
     int ch;
@@ -27,9 +28,11 @@ void manageField(FORM  *my_form,FIELD** field, int theColSize, char *queryString
 
 
     mvprintw(21, 0, "col size: %d ,row count: %d ,char count: %d ,row current: %d ,col Current: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
+    refresh();
+    set_current_field(my_form, field[30]); /* Set focus to the colored field */
     form_driver(my_form, '\0');
     int countt = 0;
-    while((ch = getch()) != KEY_F(1))
+    while((ch = wgetch(my_form_win)) != KEY_F(1))
     {	switch(ch)
         {
             case KEY_DOWN:
@@ -54,7 +57,8 @@ void manageField(FORM  *my_form,FIELD** field, int theColSize, char *queryString
                             form_driver(my_form, REQ_NEXT_CHAR);
                         }
                     }
-                    form_driver(my_form, '\0');
+
+    refresh();
                 }
                 break;
             case KEY_UP:
@@ -75,7 +79,8 @@ void manageField(FORM  *my_form,FIELD** field, int theColSize, char *queryString
                             form_driver(my_form, REQ_NEXT_CHAR);
                         }
                     }
-                    form_driver(my_form, '\0');
+
+    refresh();
                 }
                 break;
             case KEY_LEFT:
@@ -92,7 +97,8 @@ void manageField(FORM  *my_form,FIELD** field, int theColSize, char *queryString
                     mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d ,",   rowCount , charCount ,rowCur  , colCur,charCur );
                     form_driver(my_form, REQ_PREV_CHAR );
                 }
-                form_driver(my_form, '\0');
+
+    refresh();
                 break;
             case KEY_DC:
 
@@ -132,7 +138,8 @@ void manageField(FORM  *my_form,FIELD** field, int theColSize, char *queryString
                         }
                     }
                     mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d ,",   rowCount , charCount ,rowCur  , colCur,charCur );
-                    form_driver(my_form, 0);
+
+    refresh();
                 }
                 break;
             case KEY_RIGHT:
@@ -151,7 +158,8 @@ void manageField(FORM  *my_form,FIELD** field, int theColSize, char *queryString
                         mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d ,",   rowCount , charCount ,rowCur  , colCur,charCur );
                         form_driver(my_form, REQ_NEXT_CHAR );
                     }
-                    form_driver(my_form, '\0');
+
+    refresh();
                 }
                 break;
             case 10:
@@ -193,7 +201,8 @@ void manageField(FORM  *my_form,FIELD** field, int theColSize, char *queryString
                     }
                     form_driver(my_form, REQ_VALIDATION);
                     mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d ,",   rowCount , charCount ,rowCur  , colCur,charCur );
-                    form_driver(my_form, 0);
+
+    refresh();
                 }
                 break;
             case KEY_BACKSPACE:
@@ -230,7 +239,8 @@ void manageField(FORM  *my_form,FIELD** field, int theColSize, char *queryString
                         }
                     }
                     mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d ,",   rowCount , charCount ,rowCur  , colCur,charCur );
-                    form_driver(my_form, 0);
+
+    refresh();
                 }
                 break;
             default:
@@ -261,6 +271,7 @@ void manageField(FORM  *my_form,FIELD** field, int theColSize, char *queryString
                             for (int i = 1; i < colCur     ;i++){
                                 form_driver(my_form, REQ_NEXT_CHAR);
                             }
+                            mvprintw(19, 0, "-   ", theTextCurrent);
                         }
                         charCount +=1;
                         charCur +=1;
@@ -279,12 +290,38 @@ void manageField(FORM  *my_form,FIELD** field, int theColSize, char *queryString
                             form_driver(my_form, ch);
                         }
                     }
+
+
+
+
                     mvprintw(20, 0, "Item selected is : %d ", ch);
                     mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d , ",   rowCount , charCount ,rowCur  , colCur,charCur );
-                    form_driver(my_form, '\0');
+
+
+    refresh();
+//                    form_driver(my_form, '\0');
                 }
                 break;
         }
+
+                    form_driver(my_form, REQ_VALIDATION);
+                    char * theTextCurrentC= field_buffer(field[0], 0) ;
+                    set_field_buffer(field[0], 0, theTextCurrentC);
+                    for (int i = 1; i < rowCur     ;i++){
+                        form_driver(my_form, REQ_NEXT_LINE);
+                    }
+                    for (int i = 1; i < colCur     ;i++){
+                        form_driver(my_form, REQ_NEXT_CHAR);
+                    }
+
+                    mvprintw(19, 0, "- %d   %d  ", theTextCurrentC[0], theTextCurrentC[1]);
+
+                    form_driver(my_form, '\0');
+
+                    form_driver(my_form, REQ_VALIDATION);
+
+
+
     }
 
 
