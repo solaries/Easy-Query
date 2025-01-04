@@ -1,17 +1,44 @@
 #include "Field.h"
+#include "FieldInfo.h"
 #include <form.h>
 #include <panel.h>
 
 
-void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD** field, int theColSize, char *queryString[]){
+//void manageQueryField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD** field, int theColSize, char *queryString[]){
 
 
-    //mvprintw(15, 0, "%s -", *queryString );
 
+
+void setupQueryField( struct AppInfo   *appInfo){
+
+//    int ch;
+
+    int colSize = appInfo->fieldSize ;// theColSize;
+    int rowCount = 1;
+    int charCount = 0;
+    int rowCur = 1;
+    int colCur = 1;
+//    int charCur = 1;
+
+
+
+    mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
+    mvprintw(22, 0, "Alt + Q or ESC: Query,   Alt + R: Result,  Alt + M: Menu,  Alt + X: Exit" );
+    refresh();
+    set_current_field(appInfo->form, appInfo->field[0]); /* Set focus to the colored field */
+    form_driver(appInfo->form, '\0');
+
+
+}
+
+
+
+
+int manageQueryField( struct AppInfo   *appInfo){
 
     int ch;
 
-    int colSize = theColSize;
+    int colSize = appInfo->fieldSize ;// theColSize;
     int rowCount = 1;
     int charCount = 0;
     int rowCur = 1;
@@ -19,27 +46,28 @@ void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD**
     int charCur = 1;
 
 
-//    int colSize = queryField.colSize ;
-//    int rowCount = queryField.rowCount ;
-//    int charCount = queryField.charCount ;
-//    int rowCur = queryField.rowCur ;
-//    int colCur = queryField.colCur ;
-//    int charCur = queryField.charCur ;
 
-
-    mvprintw(21, 0, "col size: %d ,row count: %d ,char count: %d ,row current: %d ,col Current: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
+    mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
+    mvprintw(22, 0, "Alt + Q or ESC: Query,  Alt + E : Execute,   Alt + R: Result,  Alt + M: Menu,  Alt + X: Exit" );
     refresh();
-    set_current_field(my_form, field[30]); /* Set focus to the colored field */
-    form_driver(my_form, '\0');
-
-//update_panels();
-//doupdate();
+set_current_field(appInfo->form, appInfo->field[0]); /* Set focus to the colored field */
+    form_driver(appInfo->form, '\0');
 
 
     int countt = 0;
-    while((ch = wgetch(my_form_win)) != KEY_F(1))
+    while((ch = wgetch(appInfo->win)) != KEY_F(1))
     {	switch(ch)
         {
+
+
+
+            case 248:
+                {
+                    return 248;
+                }
+                break;
+
+
             case KEY_DOWN:
                 {
                     if(rowCur < rowCount){
@@ -56,16 +84,21 @@ void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD**
                             colCur = ((charCur   ) % colSize)  ;
                         }
                         mvprintw(19, 0, "                                                                                                                          "  );
-                        mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d ,",   rowCount , charCount ,rowCur  , colCur,charCur );
-                        form_driver(my_form, REQ_NEXT_LINE );
+                        mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
+                        form_driver(appInfo->form, REQ_NEXT_LINE );
                         for (int i = 1; i < colCur     ;i++){
-                            form_driver(my_form, REQ_NEXT_CHAR);
+                            form_driver(appInfo->form, REQ_NEXT_CHAR);
                         }
                     }
 
+
+                    mvprintw(20, 0, "Item selected is : %d                                             ", ch);
     refresh();
                 }
                 break;
+
+
+
             case KEY_UP:
                 {
                     if(rowCur > 1){
@@ -78,13 +111,15 @@ void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD**
                             colCur = ((charCur   ) % colSize)  ;
                         }
                         mvprintw(19, 0, "                                                                                                                          "  );
-                        mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d ,",   rowCount , charCount ,rowCur  , colCur,charCur );
-                        form_driver(my_form, REQ_PREV_LINE );
+                        mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
+                        form_driver(appInfo->form, REQ_PREV_LINE );
                         for (int i = 1; i < colCur     ;i++){
-                            form_driver(my_form, REQ_NEXT_CHAR);
+                            form_driver(appInfo->form, REQ_NEXT_CHAR);
                         }
                     }
 
+
+                    mvprintw(20, 0, "Item selected is : %d                                             ", ch);
 
     refresh();
                 }
@@ -100,9 +135,11 @@ void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD**
                         colCur = ((charCur   ) % colSize)  ;
                     }
                     mvprintw(19, 0, "                                                                                                                          "  );
-                    mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d ,",   rowCount , charCount ,rowCur  , colCur,charCur );
-                    form_driver(my_form, REQ_PREV_CHAR );
+                    mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
+                    form_driver(appInfo->form, REQ_PREV_CHAR );
                 }
+
+                mvprintw(20, 0, "Item selected is : %d                                             ", ch);
 
     refresh();
                 break;
@@ -110,8 +147,8 @@ void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD**
 
                 {
                     if(charCur -1 < charCount && charCur >= 1){
-                        form_driver(my_form, REQ_VALIDATION);
-                        char * theTextCurrent= field_buffer(field[0], 0) ;
+                        form_driver(appInfo->form, REQ_VALIDATION);
+                        char * theTextCurrent= field_buffer(appInfo->field[0], 0) ;
                         char theText[charCount   -1];
                         int j =0;
                         for(int i =0;i < charCount+1;i++){
@@ -125,7 +162,7 @@ void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD**
                         }
                         charCur++;
                         theText[charCount -1  ] = '\0';
-                        set_field_buffer(field[1], 0, theText);
+                        set_field_buffer(appInfo->field[1], 0, theText);
                         charCount -=1;
                         charCur -=1;
                         rowCur = ((charCur -1) / colSize) + 1  ;
@@ -137,13 +174,15 @@ void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD**
                             colCur = ((charCur ) % colSize);
                         }
                         for (int i = 1; i < rowCur;i++){
-                            form_driver(my_form, REQ_NEXT_LINE);
+                            form_driver(appInfo->form, REQ_NEXT_LINE);
                         }
                         for (int i = 1; i < colCur  ;i++){
-                            form_driver(my_form, REQ_NEXT_CHAR);
+                            form_driver(appInfo->form, REQ_NEXT_CHAR);
                         }
                     }
-                    mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d ,",   rowCount , charCount ,rowCur  , colCur,charCur );
+
+                    mvprintw(20, 0, "Item selected is : %d                                             ", ch);
+                    mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
 
     refresh();
                 }
@@ -161,18 +200,20 @@ void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD**
                             colCur = ((charCur   ) % colSize)  ;
                         }
                         mvprintw(19, 0, "                                                                                                                          "  );
-                        mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d ,",   rowCount , charCount ,rowCur  , colCur,charCur );
-                        form_driver(my_form, REQ_NEXT_CHAR );
+                        mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
+                        form_driver(appInfo->form, REQ_NEXT_CHAR );
                     }
+
+                    mvprintw(20, 0, "Item selected is : %d                                             ", ch);
 
     refresh();
                 }
                 break;
             case 10:
                 {
-                    form_driver(my_form, REQ_VALIDATION);
+                    form_driver(appInfo->form, REQ_VALIDATION);
                     int extraChar = colSize -    colCur;
-                    char * theTextCurrent= field_buffer(field[0], 0) ;
+                    char * theTextCurrent= field_buffer(appInfo->field[0], 0) ;
                     char theText[charCount   + extraChar + 1];
                     int j =0;
                     for(int i =0;i <= charCount   + extraChar +1;i++){
@@ -188,7 +229,7 @@ void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD**
                         j++;
                     }
                     theText[charCount + extraChar + 1  ] = '\0';
-                    set_field_buffer(field[0], 0, theText);
+                    set_field_buffer(appInfo->field[0], 0, theText);
                     charCount +=1  + extraChar;
                     charCur +=1  + extraChar;
                     rowCur = ((charCur -1) / colSize) + 1  ;
@@ -200,13 +241,17 @@ void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD**
                         colCur = ((charCur ) % colSize);
                     }
                     for (int i = 1; i < rowCur;i++){
-                        form_driver(my_form, REQ_NEXT_LINE);
+                        form_driver(appInfo->form, REQ_NEXT_LINE);
                     }
                     for (int i = 1; i < colCur;i++){
-                        form_driver(my_form, REQ_NEXT_CHAR);
+                        form_driver(appInfo->form, REQ_NEXT_CHAR);
                     }
-                    form_driver(my_form, REQ_VALIDATION);
-                    mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d ,",   rowCount , charCount ,rowCur  , colCur,charCur );
+                    form_driver(appInfo->form, REQ_VALIDATION);
+
+                        mvprintw(20, 0, "Item selected is : %d                                             ", ch);
+
+
+                    mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
 
     refresh();
                 }
@@ -214,8 +259,8 @@ void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD**
             case KEY_BACKSPACE:
                 {
                     if(charCur -2 < charCount && charCur >= 2){
-                        form_driver(my_form, REQ_VALIDATION);
-                        char * theTextCurrent= field_buffer(field[0], 0) ;
+                        form_driver(appInfo->form, REQ_VALIDATION);
+                        char * theTextCurrent= field_buffer(appInfo->field[0], 0) ;
                         char theText[charCount   -1];
                         int j =0;
                         for(int i =0;i < charCount+1;i++){
@@ -226,7 +271,7 @@ void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD**
                             j++;
                         }
                         theText[charCount -1  ] = '\0';
-                        set_field_buffer(field[0], 0, theText);
+                        set_field_buffer(appInfo->field[0], 0, theText);
                         charCount -=1;
                         charCur -=1;
                         rowCur = ((charCur -1) / colSize) + 1  ;
@@ -238,13 +283,15 @@ void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD**
                             colCur = ((charCur ) % colSize);
                         }
                         for (int i = 1; i < rowCur;i++){
-                            form_driver(my_form, REQ_NEXT_LINE);
+                            form_driver(appInfo->form, REQ_NEXT_LINE);
                         }
                         for (int i = 1; i < colCur;i++){
-                            form_driver(my_form, REQ_NEXT_CHAR);
+                            form_driver(appInfo->form, REQ_NEXT_CHAR);
                         }
                     }
-                    mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d ,",   rowCount , charCount ,rowCur  , colCur,charCur );
+
+                    mvprintw(20, 0, "Item selected is : %d                                             ", ch);
+                    mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
 
     refresh();
                 }
@@ -256,8 +303,8 @@ void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD**
                         bool doMovenext = false;
                         if(charCur < charCount){
                             doMovenext = true;
-                            form_driver(my_form, REQ_VALIDATION);
-                            char * theTextCurrent= field_buffer(field[0], 0) ;
+                            form_driver(appInfo->form, REQ_VALIDATION);
+                            char * theTextCurrent= field_buffer(appInfo->field[0], 0) ;
                             char theText[charCount  + 2];
                             int j =0;
                             for(int i =0;i < charCount+1;i++){
@@ -270,12 +317,12 @@ void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD**
                                 j++;
                             }
                             theText[charCount +1  ] = '\0';
-                            set_field_buffer(field[0], 0, theText);
+                            set_field_buffer(appInfo->field[0], 0, theText);
                             for (int i = 1; i < rowCur     ;i++){
-                                form_driver(my_form, REQ_NEXT_LINE);
+                                form_driver(appInfo->form, REQ_NEXT_LINE);
                             }
                             for (int i = 1; i < colCur     ;i++){
-                                form_driver(my_form, REQ_NEXT_CHAR);
+                                form_driver(appInfo->form, REQ_NEXT_CHAR);
                             }
                             mvprintw(19, 0, "-   ", theTextCurrent);
                         }
@@ -290,10 +337,10 @@ void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD**
                             colCur = ((charCur ) % colSize);
                         }
                         if(doMovenext){
-                            form_driver(my_form, REQ_NEXT_CHAR );
+                            form_driver(appInfo->form, REQ_NEXT_CHAR );
                         }
                         else{
-                            form_driver(my_form, ch);
+                            form_driver(appInfo->form, ch);
                         }
                     }
 
@@ -301,7 +348,7 @@ void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD**
 
 
                     mvprintw(20, 0, "Item selected is : %d                                             ", ch);
-                    mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d , ",   rowCount , charCount ,rowCur  , colCur,charCur );
+                    mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
 
 
     refresh();
@@ -322,7 +369,7 @@ void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD**
 //
 //                    mvprintw(19, 0, "- %d   %d  ", theTextCurrentC[0], theTextCurrentC[1]);
 //
-                    form_driver(my_form, '\0');
+                   form_driver(appInfo->form, '\0');
 //
 //                    form_driver(my_form, REQ_VALIDATION);
 
@@ -330,6 +377,7 @@ void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD**
 
     }
 
-
+return 0;
 
 }
+

@@ -54,37 +54,31 @@ int main()
 	init_pair(6, COLOR_WHITE, COLOR_BLUE);
 
 
-    struct AppInfo appInfo;
+    struct AppInfo queryInfo;
 
-	int queryFieldSize = 75;
-	FIELD *queryfield[2];
-    queryfield[0] = new_field(4, queryFieldSize, 1, 1, 0, 0);
-
-
-
-
-
-
-    queryfield[1] = NULL;
-	FORM  *queryForm = new_form(queryfield);
+	queryInfo.fieldSize = 75;
+//	FIELD *queryfield[2];
+    queryInfo.field[0] = new_field(4, queryInfo.fieldSize, 1, 1, 0, 0);
+    queryInfo.field[1] = NULL;
+	queryInfo.form = new_form(queryInfo.field);
 
 
 
 
-	set_field_fore(queryfield[0], COLOR_PAIR(5));/* Put the field with blue background */
-	set_field_back(queryfield[0], COLOR_PAIR(6));/* and white foreground (characters */
+	set_field_fore(queryInfo.field[0], COLOR_PAIR(5));/* Put the field with blue background */
+	set_field_back(queryInfo.field[0], COLOR_PAIR(6));/* and white foreground (characters */
 
     int  rows, cols;
-	 WINDOW *my_query_form_win;
+//    WINDOW *my_query_form_win;
 
-	scale_form(queryForm, &rows, &cols);
-    my_query_form_win = newwin(rows + 5, cols + 2, 1, 1);
-    keypad(my_query_form_win, TRUE);
-    set_form_win(queryForm, my_query_form_win);
-    set_form_sub(queryForm, derwin(my_query_form_win, rows, cols, 3, 1));
-    box(my_query_form_win, 0, 0);
-    win_show(my_query_form_win, "My Form",  1);
-    print_in_middle(my_query_form_win, 1, 0, cols + 4, "Query...", COLOR_PAIR(3));
+	scale_form(queryInfo.form, &rows, &cols);
+    queryInfo.win = newwin(rows + 5, cols + 2, 1, 1);
+    keypad(queryInfo.win, TRUE);
+    set_form_win(queryInfo.form, queryInfo.win);
+    set_form_sub(queryInfo.form, derwin(queryInfo.win, rows, cols, 3, 1));
+    box(queryInfo.win, 0, 0);
+    //win_show(appInfo.my_query_form_win, "...",  1);
+    print_in_middle(queryInfo.win, 1, 0, cols + 4, "Query...", COLOR_PAIR(3));
 
 
 // Create a window for the panel
@@ -94,29 +88,34 @@ int main()
 //wrefresh(queryWin);
 // Create a panel and associate it with the form
 //PANEL *queryPanel = new_panel(queryWin);
-PANEL *queryPanel = new_panel(my_query_form_win);
+//PANEL *queryPanel = new_panel(my_query_form_win);
+queryInfo.panel = new_panel(queryInfo.win);
 //set_panel_userptr(queryPanel, queryForm);
-hide_panel(queryPanel);
+hide_panel(queryInfo.panel);
 //show_panel(queryPanel);
 
 // Draw the panel and refresh the window
 update_panels();
 doupdate();
-    appInfo.queryString = "";
-    querySetup(  queryPanel, my_query_form_win,queryForm       , queryfield      , queryFieldSize, &appInfo.queryString);
+    queryInfo.str = "";
+    //querySetup(  queryPanel, my_query_form_win,queryForm       , queryfield      , queryFieldSize, &appInfo.queryString);
+    querySetup( &queryInfo );
 
+    int cmd = manageQueryField( &queryInfo ) ;
+cmd = cmd + 0;
+    //mvprintw(15, 0, "%s" , appInfo.str);
 
 //    mvprintw(15, 0, "string: %s   ",appInfo.queryString );
-//    getch();
+    //getch();
 
 
 
 
     // Clean up
 //    delwin(queryWin);
-	unpost_form(queryForm);
-	free_form(queryForm);
-	free_field(queryfield[0]);
+	unpost_form(queryInfo.form);
+	free_form(queryInfo.form);
+	free_field(queryInfo.field[0]);
 	endwin();
     return 0;
 }
@@ -125,16 +124,16 @@ doupdate();
 void win_show(WINDOW *win, char *label, int label_color)
 {
 
-    int startx, starty, height, width;
+    int /*startx, starty,*/  height, width;
 
-	getbegyx(win, starty, startx);
+	//getbegyx(win, starty, startx);
 	getmaxyx(win, height, width);
 
 	box(win, 0, 0);
 	mvwaddch(win, 2, 0, ACS_LTEE);
 	mvwhline(win, 2, 1, ACS_HLINE, width - 2);
 	mvwaddch(win, 2, width - 1, ACS_RTEE);
-
+    height = height + 0;
 	print_in_middle(win, 1, 0, width, label, COLOR_PAIR(label_color));
 }
 

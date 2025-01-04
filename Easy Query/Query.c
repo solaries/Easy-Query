@@ -7,10 +7,11 @@
 #include "FieldInfo.h"
 
 
-void querySetup(PANEL *queryPanel, WINDOW *my_query_form_win,FORM  *my_form,FIELD** field, int theColSize, char *queryString[]){
+//void querySetup(PANEL *queryPanel, WINDOW *my_query_form_win,FORM  *my_form,FIELD** field, int theColSize, char *queryString[]){
+void querySetup(struct AppInfo   *appInfo){
     //struct FieldInfo queryField;
-    *queryString = "XX 3 XXX";
-    *queryString = "DD";
+    appInfo->str= "XX 3 XXX";
+    appInfo->str = "DD";
 
 //    queryField.colSize = theColSize;
 //    queryField.rowCount = 1;
@@ -24,23 +25,38 @@ void querySetup(PANEL *queryPanel, WINDOW *my_query_form_win,FORM  *my_form,FIEL
 
 
 	//set_field_back(field[0], A_UNDERLINE);
-    field_opts_off(field[0], O_AUTOSKIP);
-    set_field_opts(field[0], O_VISIBLE | O_PUBLIC | O_EDIT | O_ACTIVE | O_WRAP   );
+    field_opts_off(appInfo->field[0], O_AUTOSKIP);
+    set_field_opts(appInfo->field[0], O_VISIBLE | O_PUBLIC | O_EDIT | O_ACTIVE | O_WRAP   );
 
-    post_form(my_form);
-	wrefresh(my_query_form_win);
+    post_form(appInfo->form);
+	wrefresh(appInfo->win);
 //    form_driver(my_form, '\0');
 
 //update_panels();
 //doupdate();
 
 //    refresh();
-    set_current_field(my_form, field[0]);
+    set_current_field(appInfo->form, appInfo->field[0]);
     //mvprintw(5, 2, "Q");
 //    form_driver(my_form, '\0');
 //    refresh();
 
 
-    manageField( queryPanel, my_query_form_win, my_form, field,   theColSize,   queryString );
+//    manageQueryField( queryPanel, my_query_form_win, my_form, field,   theColSize,   queryString );
+    setupQueryField( appInfo);
+    //manageQueryField( appInfo);
 
 }
+
+
+
+int queryManagement(struct AppInfo   *appInfo){
+    appInfo->str= "XX 3 XXX";
+    appInfo->str = "DD";
+    set_current_field(appInfo->form, appInfo->field[0]);
+    return manageQueryField( appInfo);
+}
+
+
+
+
