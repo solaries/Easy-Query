@@ -75,7 +75,7 @@ int main()
 	set_field_back(queryfield[0], COLOR_PAIR(6));/* and white foreground (characters */
 
     int  rows, cols;
-	WINDOW *my_query_form_win;
+	 WINDOW *my_query_form_win;
 
 	scale_form(queryForm, &rows, &cols);
     my_query_form_win = newwin(rows + 5, cols + 2, 1, 1);
@@ -94,15 +94,16 @@ int main()
 //wrefresh(queryWin);
 // Create a panel and associate it with the form
 //PANEL *queryPanel = new_panel(queryWin);
+PANEL *queryPanel = new_panel(my_query_form_win);
 //set_panel_userptr(queryPanel, queryForm);
-//hide_panel(queryPanel);
+hide_panel(queryPanel);
 //show_panel(queryPanel);
 
 // Draw the panel and refresh the window
-//update_panels();
-//doupdate();
+update_panels();
+doupdate();
     appInfo.queryString = "";
-    querySetup(  my_query_form_win,queryForm       , queryfield      , queryFieldSize, &appInfo.queryString);
+    querySetup(  queryPanel, my_query_form_win,queryForm       , queryfield      , queryFieldSize, &appInfo.queryString);
 
 
 //    mvprintw(15, 0, "string: %s   ",appInfo.queryString );

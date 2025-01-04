@@ -11,4 +11,4 @@
 
 
 
-    void querySetup( WINDOW *my_query_form_win,FORM  *my_form,FIELD** field, int theColSize, char  *queryString[]);
+    void querySetup( PANEL *queryPanel,WINDOW *my_query_form_win,FORM  *my_form,FIELD** field, int theColSize, char  *queryString[]);

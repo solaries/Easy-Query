@@ -7,7 +7,7 @@
 #include "FieldInfo.h"
 
 
-void querySetup( WINDOW *my_query_form_win,FORM  *my_form,FIELD** field, int theColSize, char *queryString[]){
+void querySetup(PANEL *queryPanel, WINDOW *my_query_form_win,FORM  *my_form,FIELD** field, int theColSize, char *queryString[]){
     //struct FieldInfo queryField;
     *queryString = "XX 3 XXX";
     *queryString = "DD";
@@ -38,9 +38,9 @@ void querySetup( WINDOW *my_query_form_win,FORM  *my_form,FIELD** field, int the
     set_current_field(my_form, field[0]);
     //mvprintw(5, 2, "Q");
 //    form_driver(my_form, '\0');
-    refresh();
+//    refresh();
 
 
-    manageField(  my_query_form_win, my_form, field,   theColSize,   queryString );
+    manageField( queryPanel, my_query_form_win, my_form, field,   theColSize,   queryString );
 
 }

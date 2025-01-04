@@ -3,7 +3,7 @@
 #include <panel.h>
 
 
-void manageField( WINDOW *my_form_win, FORM  *my_form,FIELD** field, int theColSize, char *queryString[]){
+void manageField( PANEL *queryPanel, WINDOW *my_form_win, FORM  *my_form,FIELD** field, int theColSize, char *queryString[]){
 
 
     //mvprintw(15, 0, "%s -", *queryString );
@@ -31,6 +31,11 @@ void manageField( WINDOW *my_form_win, FORM  *my_form,FIELD** field, int theColS
     refresh();
     set_current_field(my_form, field[30]); /* Set focus to the colored field */
     form_driver(my_form, '\0');
+
+//update_panels();
+//doupdate();
+
+
     int countt = 0;
     while((ch = wgetch(my_form_win)) != KEY_F(1))
     {	switch(ch)
@@ -38,7 +43,7 @@ void manageField( WINDOW *my_form_win, FORM  *my_form,FIELD** field, int theColS
             case KEY_DOWN:
                 {
                     if(rowCur < rowCount){
-                        for(int i = 1; i <=4; i++){
+                        for(int i = 1; i <=colSize; i++){
                             if(charCur   <=charCount){
                                 charCur +=1;
                             }
@@ -64,7 +69,7 @@ void manageField( WINDOW *my_form_win, FORM  *my_form,FIELD** field, int theColS
             case KEY_UP:
                 {
                     if(rowCur > 1){
-                        charCur -=4;
+                        charCur -=colSize;
                         rowCur -=1;
                         if((charCur    )% colSize ==0){
                             colCur = colSize;
@@ -79,6 +84,7 @@ void manageField( WINDOW *my_form_win, FORM  *my_form,FIELD** field, int theColS
                             form_driver(my_form, REQ_NEXT_CHAR);
                         }
                     }
+
 
     refresh();
                 }
@@ -294,7 +300,7 @@ void manageField( WINDOW *my_form_win, FORM  *my_form,FIELD** field, int theColS
 
 
 
-                    mvprintw(20, 0, "Item selected is : %d ", ch);
+                    mvprintw(20, 0, "Item selected is : %d                                             ", ch);
                     mvprintw(21, 0, " row count: %d ,char count: %d ,row current: %d ,col Current: %d ,char Current: %d , ",   rowCount , charCount ,rowCur  , colCur,charCur );
 
 
@@ -304,21 +310,21 @@ void manageField( WINDOW *my_form_win, FORM  *my_form,FIELD** field, int theColS
                 break;
         }
 
-                    form_driver(my_form, REQ_VALIDATION);
-                    char * theTextCurrentC= field_buffer(field[0], 0) ;
-                    set_field_buffer(field[0], 0, theTextCurrentC);
-                    for (int i = 1; i < rowCur     ;i++){
-                        form_driver(my_form, REQ_NEXT_LINE);
-                    }
-                    for (int i = 1; i < colCur     ;i++){
-                        form_driver(my_form, REQ_NEXT_CHAR);
-                    }
-
-                    mvprintw(19, 0, "- %d   %d  ", theTextCurrentC[0], theTextCurrentC[1]);
-
+//                    form_driver(my_form, REQ_VALIDATION);
+//                    char * theTextCurrentC= field_buffer(field[0], 0) ;
+//                    set_field_buffer(field[0], 0, theTextCurrentC);
+//                    for (int i = 1; i < rowCur     ;i++){
+//                        form_driver(my_form, REQ_NEXT_LINE);
+//                    }
+//                    for (int i = 1; i < colCur     ;i++){
+//                        form_driver(my_form, REQ_NEXT_CHAR);
+//                    }
+//
+//                    mvprintw(19, 0, "- %d   %d  ", theTextCurrentC[0], theTextCurrentC[1]);
+//
                     form_driver(my_form, '\0');
-
-                    form_driver(my_form, REQ_VALIDATION);
+//
+//                    form_driver(my_form, REQ_VALIDATION);
 
 
 
