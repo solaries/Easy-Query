@@ -66,6 +66,10 @@ int main()
     resultSetup( &resultInfo );
 
 
+	WINDOW *menu_win;
+	menuSetup(menu_win);
+
+
     int cmd = manageQuery( &queryInfo ) ;
 
 
@@ -94,7 +98,7 @@ int main()
 
             case 23  :
                 { //ctrl + W - for menu
-                cmd = 24;
+                   cmd = manageMenu( menu_win );
 //                    return ch;
                 }
                 break;
@@ -142,6 +146,13 @@ int main()
 	unpost_form(queryInfo.form);
 	free_form(queryInfo.form);
 	free_field(queryInfo.field[0]);
+
+	unpost_form(resultInfo.form);
+	free_form(resultInfo.form);
+	free_field(resultInfo.field[0]);
+
+
+
 	endwin();
     return 0;
 }

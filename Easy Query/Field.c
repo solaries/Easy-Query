@@ -232,6 +232,18 @@ set_current_field(appInfo->form, appInfo->field[0]); /* Set focus to the colored
     refresh();
                 }
                 break;
+//            case 360:
+//                    form_driver(appInfo->form, REQ_END_LINE );
+//                    mvprintw(23, 75, "%d", ch);
+//
+//    refresh();
+//                break;
+//            case 262:
+//                    form_driver(appInfo->form, REQ_BEG_LINE );
+//                    mvprintw(23, 75, "%d", ch);
+//
+//    refresh();
+//                break;
             case KEY_LEFT:
                 if(charCur > 1){
                     charCur -=1;
