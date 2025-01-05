@@ -7,7 +7,7 @@
 #define QUERY_H_INCLUDED
 
     void querySetup( struct AppInfo *appInfo);
-    int queryManagement( struct AppInfo *appInfo);
+    int manageQuery( struct AppInfo *appInfo);
 
 
 #endif // QUERY_H_INCLUDED

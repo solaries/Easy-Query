@@ -14,8 +14,11 @@ struct AppInfo {
 	char *str  ;
 
 
-	FIELD *multiField[1][1] ;
+	FIELD **multiField ;
 	char *strMsg  ;
+
+
+	bool msg;
 };
 
 

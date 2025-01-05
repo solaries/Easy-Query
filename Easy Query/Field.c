@@ -23,7 +23,8 @@ void setupQueryField( struct AppInfo   *appInfo){
 
 
     mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
-    mvprintw(22, 0, "Alt + Q or ESC: Query,   Alt + R: Result,  Alt + M: Menu,  Alt + X: Exit" );
+    mvprintw(22, 0, "Alt + Q or ESC: Query,  Alt + E : Execute,   Alt + R: Result" );
+    mvprintw(23, 0, "Alt + M: Menu,  Alt + X: Exit" );
     refresh();
     set_current_field(appInfo->form, appInfo->field[0]); /* Set focus to the colored field */
     form_driver(appInfo->form, '\0');
@@ -48,25 +49,58 @@ int manageQueryField( struct AppInfo   *appInfo){
 
 
     mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
-    mvprintw(22, 0, "Alt + Q or ESC: Query,  Alt + E : Execute,   Alt + R: Result,  Alt + M: Menu,  Alt + X: Exit" );
+    mvprintw(22, 0, "Alt + Q or ESC: Query,  Alt + E : Execute,   Alt + R: Result" );
+    mvprintw(23, 0, "Alt + M: Menu,  Alt + X: Exit, Space: toggle Select" );
     refresh();
 set_current_field(appInfo->form, appInfo->field[0]); /* Set focus to the colored field */
     form_driver(appInfo->form, '\0');
 
 
     int countt = 0;
-    while((ch = wgetch(appInfo->win)) != KEY_F(1))
+    while((ch = wgetch(appInfo->win)) != 0)
     {	switch(ch)
         {
-
-
-
-            case 248:
-                {
-                    return 248;
+            case 9  :
+                { //tab
+                    return ch;
                 }
                 break;
 
+            case 27  :
+                { //esc
+                    return ch;
+                }
+                break;
+
+            case 229  :
+                { //alt + E
+                    return ch;
+                }
+                break;
+
+            case 237  :
+                { //alt + M
+                    return ch;
+                }
+                break;
+
+            case 241  :
+                { //alt + Q
+                    return ch;
+                }
+                break;
+
+            case 242  :
+                { //alt + R
+                    return ch;
+                }
+                break;
+
+            case 248  :
+                { //alt + x
+                    return ch;
+                }
+                break;
 
             case KEY_DOWN:
                 {
@@ -92,7 +126,7 @@ set_current_field(appInfo->form, appInfo->field[0]); /* Set focus to the colored
                     }
 
 
-                    mvprintw(20, 0, "Item selected is : %d                                             ", ch);
+                    mvprintw(23, 75, "%d", ch);
     refresh();
                 }
                 break;
@@ -119,7 +153,7 @@ set_current_field(appInfo->form, appInfo->field[0]); /* Set focus to the colored
                     }
 
 
-                    mvprintw(20, 0, "Item selected is : %d                                             ", ch);
+                    mvprintw(23, 75, "%d", ch);
 
     refresh();
                 }
@@ -139,7 +173,7 @@ set_current_field(appInfo->form, appInfo->field[0]); /* Set focus to the colored
                     form_driver(appInfo->form, REQ_PREV_CHAR );
                 }
 
-                mvprintw(20, 0, "Item selected is : %d                                             ", ch);
+                    mvprintw(23, 75, "%d", ch);
 
     refresh();
                 break;
@@ -162,7 +196,7 @@ set_current_field(appInfo->form, appInfo->field[0]); /* Set focus to the colored
                         }
                         charCur++;
                         theText[charCount -1  ] = '\0';
-                        set_field_buffer(appInfo->field[1], 0, theText);
+                        set_field_buffer(appInfo->field[0], 0, theText);
                         charCount -=1;
                         charCur -=1;
                         rowCur = ((charCur -1) / colSize) + 1  ;
@@ -181,7 +215,7 @@ set_current_field(appInfo->form, appInfo->field[0]); /* Set focus to the colored
                         }
                     }
 
-                    mvprintw(20, 0, "Item selected is : %d                                             ", ch);
+                    mvprintw(23, 75, "%d", ch);
                     mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
 
     refresh();
@@ -204,7 +238,7 @@ set_current_field(appInfo->form, appInfo->field[0]); /* Set focus to the colored
                         form_driver(appInfo->form, REQ_NEXT_CHAR );
                     }
 
-                    mvprintw(20, 0, "Item selected is : %d                                             ", ch);
+                    mvprintw(23, 75, "%d", ch);
 
     refresh();
                 }
@@ -248,7 +282,7 @@ set_current_field(appInfo->form, appInfo->field[0]); /* Set focus to the colored
                     }
                     form_driver(appInfo->form, REQ_VALIDATION);
 
-                        mvprintw(20, 0, "Item selected is : %d                                             ", ch);
+                    mvprintw(23, 75, "%d", ch);
 
 
                     mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
@@ -290,7 +324,7 @@ set_current_field(appInfo->form, appInfo->field[0]); /* Set focus to the colored
                         }
                     }
 
-                    mvprintw(20, 0, "Item selected is : %d                                             ", ch);
+                    mvprintw(23, 75, "%d", ch);
                     mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
 
     refresh();
@@ -347,7 +381,7 @@ set_current_field(appInfo->form, appInfo->field[0]); /* Set focus to the colored
 
 
 
-                    mvprintw(20, 0, "Item selected is : %d                                             ", ch);
+                    mvprintw(23, 75, "%d", ch);
                     mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
 
 
@@ -357,23 +391,7 @@ set_current_field(appInfo->form, appInfo->field[0]); /* Set focus to the colored
                 break;
         }
 
-//                    form_driver(my_form, REQ_VALIDATION);
-//                    char * theTextCurrentC= field_buffer(field[0], 0) ;
-//                    set_field_buffer(field[0], 0, theTextCurrentC);
-//                    for (int i = 1; i < rowCur     ;i++){
-//                        form_driver(my_form, REQ_NEXT_LINE);
-//                    }
-//                    for (int i = 1; i < colCur     ;i++){
-//                        form_driver(my_form, REQ_NEXT_CHAR);
-//                    }
-//
-//                    mvprintw(19, 0, "- %d   %d  ", theTextCurrentC[0], theTextCurrentC[1]);
-//
                    form_driver(appInfo->form, '\0');
-//
-//                    form_driver(my_form, REQ_VALIDATION);
-
-
 
     }
 

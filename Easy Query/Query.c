@@ -50,11 +50,66 @@ void querySetup(struct AppInfo   *appInfo){
 
 
 
-int queryManagement(struct AppInfo   *appInfo){
+int manageQuery(struct AppInfo   *appInfo){
+    int ch;
     appInfo->str= "XX 3 XXX";
     appInfo->str = "DD";
     set_current_field(appInfo->form, appInfo->field[0]);
-    return manageQueryField( appInfo);
+
+    while((ch = manageQueryField( appInfo)) !=0)
+    {	switch(ch)
+        {
+            case 9  :
+                { //tab
+//                    return ch;
+                }
+                break;
+
+            case 27  :
+                { //esc
+//                    return ch;
+                }
+                break;
+
+            case 229  :
+                { //alt + E
+                    return ch;
+                }
+                break;
+
+            case 237  :
+                { //alt + M
+                    return ch;
+                }
+                break;
+
+            case 241  :
+                { //alt + Q
+//                    return ch;
+                }
+                break;
+
+            case 242  :
+                { //alt + R
+                    return ch;
+                }
+                break;
+
+            case 248  :
+                { //alt + x
+                    return ch;
+                }
+                break;
+            default:
+
+                {
+
+                }
+                break;
+        }
+    }
+
+    return 0;
 }
 
 

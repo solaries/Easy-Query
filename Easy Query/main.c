@@ -32,6 +32,7 @@
 
 void win_show(WINDOW *win, char *label, int label_color);
 void print_in_middle(WINDOW *win, int starty, int startx, int width, char *string, chtype color);
+void buildInfo( struct AppInfo *appInfo , int fieldSize,char *label,  int yPlus);
 
 
 int main()
@@ -44,7 +45,7 @@ int main()
 	noecho();
 	keypad(stdscr, TRUE);
 
-	init_pair(1, COLOR_RED, COLOR_BLACK);
+	init_pair(1, COLOR_WHITE, COLOR_BLACK);
 	init_pair(2, COLOR_GREEN, COLOR_BLACK);
 	init_pair(3, COLOR_BLUE, COLOR_BLACK);
 	init_pair(4, COLOR_CYAN, COLOR_BLACK);
@@ -55,54 +56,77 @@ int main()
 
 
     struct AppInfo queryInfo;
-
-	queryInfo.fieldSize = 75;
-//	FIELD *queryfield[2];
-    queryInfo.field[0] = new_field(4, queryInfo.fieldSize, 1, 1, 0, 0);
-    queryInfo.field[1] = NULL;
-	queryInfo.form = new_form(queryInfo.field);
-
-
-
-
-	set_field_fore(queryInfo.field[0], COLOR_PAIR(5));/* Put the field with blue background */
-	set_field_back(queryInfo.field[0], COLOR_PAIR(6));/* and white foreground (characters */
-
-    int  rows, cols;
-//    WINDOW *my_query_form_win;
-
-	scale_form(queryInfo.form, &rows, &cols);
-    queryInfo.win = newwin(rows + 5, cols + 2, 1, 1);
-    keypad(queryInfo.win, TRUE);
-    set_form_win(queryInfo.form, queryInfo.win);
-    set_form_sub(queryInfo.form, derwin(queryInfo.win, rows, cols, 3, 1));
-    box(queryInfo.win, 0, 0);
-    //win_show(appInfo.my_query_form_win, "...",  1);
-    print_in_middle(queryInfo.win, 1, 0, cols + 4, "Query...", COLOR_PAIR(3));
-
-
-// Create a window for the panel
-//WINDOW *queryWin = newwin(10, 78, 1, 1);
-//win_show(queryWin, "Query",  1);
-//box(queryWin, 0, 0);
-//wrefresh(queryWin);
-// Create a panel and associate it with the form
-//PANEL *queryPanel = new_panel(queryWin);
-//PANEL *queryPanel = new_panel(my_query_form_win);
-queryInfo.panel = new_panel(queryInfo.win);
-//set_panel_userptr(queryPanel, queryForm);
-hide_panel(queryInfo.panel);
-//show_panel(queryPanel);
-
-// Draw the panel and refresh the window
-update_panels();
-doupdate();
-    queryInfo.str = "";
-    //querySetup(  queryPanel, my_query_form_win,queryForm       , queryfield      , queryFieldSize, &appInfo.queryString);
+    buildInfo(&queryInfo  , 75,"Query...",0);
     querySetup( &queryInfo );
 
-    int cmd = manageQueryField( &queryInfo ) ;
-cmd = cmd + 0;
+
+
+    struct AppInfo resultInfo;
+    buildInfo(&resultInfo  , 75,"Result...",10);
+    resultSetup( &resultInfo );
+
+
+    int cmd = manageQuery( &queryInfo ) ;
+
+
+//	set_field_fore(queryInfo.field[0], COLOR_PAIR(1));/* Put the field with blue background */
+//	set_field_back(queryInfo.field[0], COLOR_PAIR(2));/* and white foreground (characters */
+    while(cmd !=248){
+        switch(cmd)
+        {
+            case 9  :
+                { //tab
+//                    return ch;
+                }
+                break;
+
+            case 27  :
+                { //esc
+                    cmd = manageQuery( &queryInfo ) ;
+                }
+                break;
+
+            case 229  :
+                { //alt + E
+                   cmd =  manageResult( &resultInfo ) ;
+                }
+                break;
+
+            case 237  :
+                { //alt + M
+                cmd = 248;
+//                    return ch;
+                }
+                break;
+
+            case 241  :
+                { //alt + Q
+                    cmd = manageQuery( &queryInfo ) ;
+                }
+                break;
+
+            case 242  :
+                { //alt + R
+                   cmd =  manageResult( &resultInfo ) ;
+                }
+                break;
+
+            case 248  :
+                { //alt + x
+//                    return ch;
+                }
+                break;
+            default:
+
+                {
+
+                }
+                break;
+        }
+    }
+
+//      cmd = manageQueryField( &queryInfo ) ;
+//    cmd = cmd + 0;
     //mvprintw(15, 0, "%s" , appInfo.str);
 
 //    mvprintw(15, 0, "string: %s   ",appInfo.queryString );
@@ -118,6 +142,66 @@ cmd = cmd + 0;
 	free_field(queryInfo.field[0]);
 	endwin();
     return 0;
+}
+
+void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlus){
+
+
+	appInfo->fieldSize = fieldSize ;//75;
+//	FIELD *queryfield[2];
+    appInfo->field[0] = new_field(4, appInfo->fieldSize, 1, 1, 0, 0);
+    appInfo->field[1] = NULL;
+	appInfo->form = new_form(appInfo->field);
+	set_field_fore(appInfo->field[0], COLOR_PAIR(5));/* Put the field with blue background */
+	set_field_back(appInfo->field[0], COLOR_PAIR(6));/* and white foreground (characters */
+
+    int  rows, cols;
+//    WINDOW *my_query_form_win;
+
+	scale_form(appInfo->form, &rows, &cols);
+    appInfo->win = newwin(rows + 5, cols + 2, 1 + yPlus, 1);
+    keypad(appInfo->win, TRUE);
+    set_form_win(appInfo->form, appInfo->win);
+    set_form_sub(appInfo->form, derwin(appInfo->win, rows, cols, 3, 1));
+    box(appInfo->win, 0, 0);
+    //win_show(appInfo.my_query_form_win, "...",  1);
+//    print_in_middle(appInfo->win, 1, 0, cols + 4, "Query...", COLOR_PAIR(3));
+    print_in_middle(appInfo->win, 1, 0, cols + 4, label, COLOR_PAIR(1));
+
+
+// Create a window for the panel
+//WINDOW *queryWin = newwin(10, 78, 1, 1);
+//win_show(queryWin, "Query",  1);
+//box(queryWin, 0, 0);
+//wrefresh(queryWin);
+// Create a panel and associate it with the form
+//PANEL *queryPanel = new_panel(queryWin);
+//PANEL *queryPanel = new_panel(my_query_form_win);
+appInfo->panel = new_panel(appInfo->win);
+//set_panel_userptr(queryPanel, queryForm);
+hide_panel(appInfo->panel);
+//show_panel(queryPanel);
+
+// Draw the panel and refresh the window
+update_panels();
+doupdate();
+    appInfo->str = "";
+    //querySetup(  queryPanel, my_query_form_win,queryForm       , queryfield      , queryFieldSize, &appInfo.queryString);
+
+
+
+
+
+//    appInfo->str= "XX 3 XXX";
+//    appInfo->str = "DD";
+//    field_opts_off(appInfo->field[0], O_AUTOSKIP);
+//    set_field_opts(appInfo->field[0], O_VISIBLE | O_PUBLIC | O_EDIT | O_ACTIVE | O_WRAP   );
+//
+//    post_form(appInfo->form);
+//	wrefresh(appInfo->win);
+//    set_current_field(appInfo->form, appInfo->field[0]);
+//    setupQueryField( appInfo);
+
 }
 
 
