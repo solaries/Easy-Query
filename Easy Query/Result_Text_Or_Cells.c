@@ -16,6 +16,7 @@ void resultSetup(struct AppInfo   *appInfo){
 
     post_form(appInfo->form);
 	wrefresh(appInfo->win);
+
     set_current_field(appInfo->form, appInfo->field[0]);
     setupQueryField( appInfo);
 
@@ -48,32 +49,34 @@ int manageResult(struct AppInfo   *appInfo){
                 }
                 break;
 
-            case 229  :
-                { //alt + E
+
+            case 5  :
+                { //ctrl + E
 //                    return ch;
                 }
                 break;
 
-            case 237  :
-                { //alt + M
+            case 23  :
+                { //ctrl + W - for menu
                     return ch;
                 }
                 break;
 
-            case 241  :
-                { //alt + Q
+            case 17  :
+                { //ctrl + Q
                     return ch;
                 }
                 break;
 
-            case 242  :
-                { //alt + R
+
+            case 18  :
+                { //ctrl + R
 //                    return ch;
                 }
                 break;
 
-            case 248  :
-                { //alt + x
+            case 24  :
+                { //ctrl + x
                     return ch;
                 }
                 break;

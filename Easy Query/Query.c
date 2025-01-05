@@ -10,8 +10,8 @@
 //void querySetup(PANEL *queryPanel, WINDOW *my_query_form_win,FORM  *my_form,FIELD** field, int theColSize, char *queryString[]){
 void querySetup(struct AppInfo   *appInfo){
     //struct FieldInfo queryField;
-    appInfo->str= "XX 3 XXX";
-    appInfo->str = "DD";
+//    appInfo->str= "XX 3 XXX";
+//    appInfo->str = "DD";
 
 //    queryField.colSize = theColSize;
 //    queryField.rowCount = 1;
@@ -52,9 +52,11 @@ void querySetup(struct AppInfo   *appInfo){
 
 int manageQuery(struct AppInfo   *appInfo){
     int ch;
-    appInfo->str= "XX 3 XXX";
-    appInfo->str = "DD";
+//    appInfo->str= "XX 3 XXX";
+//    appInfo->str = "DD";
     set_current_field(appInfo->form, appInfo->field[0]);
+
+//    set_field_buffer(appInfo->field[0], 0, appInfo->str);
 
     while((ch = manageQueryField( appInfo)) !=0)
     {	switch(ch)
@@ -71,32 +73,35 @@ int manageQuery(struct AppInfo   *appInfo){
                 }
                 break;
 
-            case 229  :
-                { //alt + E
+
+            case 5  :
+                { //ctrl + E
                     return ch;
                 }
                 break;
 
-            case 237  :
-                { //alt + M
+            case 23  :
+                { //ctrl + W - for menu
                     return ch;
                 }
                 break;
 
-            case 241  :
-                { //alt + Q
+            case 17  :
+                { //ctrl + Q
 //                    return ch;
                 }
                 break;
 
-            case 242  :
-                { //alt + R
+
+            case 18  :
+                { //ctrl + R
                     return ch;
                 }
                 break;
 
-            case 248  :
-                { //alt + x
+
+            case 24  :
+                { //ctrl + x
                     return ch;
                 }
                 break;

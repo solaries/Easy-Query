@@ -71,7 +71,7 @@ int main()
 
 //	set_field_fore(queryInfo.field[0], COLOR_PAIR(1));/* Put the field with blue background */
 //	set_field_back(queryInfo.field[0], COLOR_PAIR(2));/* and white foreground (characters */
-    while(cmd !=248){
+    while(cmd !=24){
         switch(cmd)
         {
             case 9  :
@@ -86,33 +86,35 @@ int main()
                 }
                 break;
 
-            case 229  :
-                { //alt + E
+            case 5  :
+                { //ctrl + E
                    cmd =  manageResult( &resultInfo ) ;
                 }
                 break;
 
-            case 237  :
-                { //alt + M
-                cmd = 248;
+            case 23  :
+                { //ctrl + W - for menu
+                cmd = 24;
 //                    return ch;
                 }
                 break;
 
-            case 241  :
-                { //alt + Q
+
+            case 17  :
+                { //ctrl + Q
                     cmd = manageQuery( &queryInfo ) ;
                 }
                 break;
 
-            case 242  :
-                { //alt + R
+            case 18  :
+                { //ctrl + R
                    cmd =  manageResult( &resultInfo ) ;
                 }
                 break;
 
-            case 248  :
-                { //alt + x
+
+            case 24  :
+                { //ctrl + x
 //                    return ch;
                 }
                 break;
@@ -148,6 +150,17 @@ void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlu
 
 
 	appInfo->fieldSize = fieldSize ;//75;
+
+
+    appInfo->rowCount = 1;
+    appInfo->charCount = 0;
+    appInfo->rowCur = 1;
+    appInfo->colCur = 1;
+    appInfo->charCur = 1;
+
+
+
+
 //	FIELD *queryfield[2];
     appInfo->field[0] = new_field(4, appInfo->fieldSize, 1, 1, 0, 0);
     appInfo->field[1] = NULL;
