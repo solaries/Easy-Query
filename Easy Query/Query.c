@@ -44,6 +44,12 @@ void querySetup(struct AppInfo   *appInfo){
 
 //    manageQueryField( queryPanel, my_query_form_win, my_form, field,   theColSize,   queryString );
     setupQueryField( appInfo);
+
+//        mvprintw(1, 0, " '%p'  ",  appInfo );
+//    mvprintw(2, 0, " '%p'  ", *appInfo );
+//    mvprintw(3, 0, " '%p'  ", *appInfo );
+
+
     //manageQueryField( appInfo);
 
 }

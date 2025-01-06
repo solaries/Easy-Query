@@ -30,7 +30,6 @@ struct AppInfo {
 };
 
 
-
 #endif // FIELDINFO_H_INCLUDED
 
 

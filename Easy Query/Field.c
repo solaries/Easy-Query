@@ -46,8 +46,8 @@ void setupQueryField( struct AppInfo   *appInfo){
 
 
     mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
-    mvprintw(22, 0, "Alt + Q or ESC: Query,  Alt + E : Execute,   Alt + R: Result" );
-    mvprintw(23, 0, "Alt + M: Menu,  Alt + X: Exit" );
+    mvprintw(22, 0, "Ctrl + Q or ESC: Query,  Ctrl + E : Execute,   Ctrl + R: Result" );
+    mvprintw(23, 0, "Ctrl + W: Menu,  Alt + X: Exit, Space: toggle Select" );
     refresh();
     set_current_field(appInfo->form, appInfo->field[0]); /* Set focus to the colored field */
     form_driver(appInfo->form, '\0');
@@ -122,7 +122,7 @@ int manageQueryField( struct AppInfo   *appInfo){
 
     mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
     mvprintw(22, 0, "Ctrl + Q or ESC: Query,  Ctrl + E : Execute,   Ctrl + R: Result" );
-    mvprintw(23, 0, "Ctrl + M: Menu,  Ctrl + X: Exit, Space: toggle Select" );
+    mvprintw(23, 0, "Ctrl + W: Menu,  Ctrl + X: Exit, Space: toggle Select" );
     refresh();
 set_current_field(appInfo->form, appInfo->field[0]); /* Set focus to the colored field */
     form_driver(appInfo->form, '\0');

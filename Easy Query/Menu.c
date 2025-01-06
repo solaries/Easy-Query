@@ -1,5 +1,6 @@
 #include "Menu.h"
 #include <ncurses.h>
+#include "FieldInfo.h"
 
 #define WIDTH 30
 #define HEIGHT 12
@@ -8,42 +9,72 @@ int startx = 0;
 int starty = 0;
 
 char *choices[] = {
-			"Server Connection",
-			"Create Database",
+			"Server Connection  ",
+			"Create Database    ",
 			"Connect to Database",
-			"Create Table",
-			"Insert",
-			"Select",
-			"Update",
-			"Delete",
-			"Exit",
+			"Create Table       ",
+			"Insert             ",
+			"Select             ",
+			"Update             ",
+			"Delete             ",
+			"Exit               ",
 		  };
 
 int n_choices = sizeof(choices) / sizeof(char *);
-void print_menu(WINDOW **menu_win, int highlight);
+void print_menu(struct AppInfo   *appInfo, int highlight);
 
-void menuSetup(WINDOW *menu_win ){
+//void menuSetup(WINDOW **menu_win ){
+void menuSetup(struct AppInfo   *appInfo){
 //	int highlight = 1;
 //	int choice = 0;
 
 	startx = (80 - WIDTH) / 2;
 	starty = (24 - HEIGHT) / 2;
-	menu_win = newwin(HEIGHT, WIDTH, starty -6, startx -20);
-	keypad(menu_win, TRUE);
+	appInfo->win = newwin(HEIGHT, WIDTH, starty -6, startx -21);
+//mvprintw(1, 0, "XXXXXXXXXXXXXXXXXXXXXXXXXXX" );
+//    mvprintw(9, 0, "1uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu '%p' '%d'", *menu_win , *menu_win._begx);
+//    mvprintw(1, 0, "   '%p' '%d' '%d' '%d'",  appInfo->win , appInfo->win->_begx ,startx,starty );
+    //mvprintw(9, 0, "1uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu '%p'  ", *menu_win );
 	refresh();
+
+//    mvprintw(10, 0, "2uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu '%p'  ", &menu_win  );
+//    mvprintw(10, 0, "2uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu '%p' '%d'", &menu_win , &menu_win._begx);
+//	refresh();
+
+	keypad(appInfo->win, TRUE);
+	refresh();
+
+//    mvprintw(10, 0, "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu '%d'", &menu_win->_begx);
+//	refresh();
 	//
 
 
 }
 
 
-int manageMenu(WINDOW *menu_win){
+//int manageMenu(WINDOW *menu_win){
+int manageMenu(struct AppInfo   *appInfo){
 	int highlight = 1;
 	int choice = 0;
 	int c;
-	print_menu(&menu_win, highlight);
+
+//mvprintw(1, 0, "                            " );
+//	int mxx =  appInfo->win->_begx;
+//    mvprintw(20, 0, "@@@@@@@@@@@@@@@@@@@@@@@   '%p'  ",  appInfo );
+//    mvprintw(21, 0, "@@@@@@@@@@@@@@@@@@@@@@@   '%p' '%d'",  appInfo->win , appInfo->win->_begx );
+//	refresh();
+
+//	getch();
+//    mvprintw(22, 0, "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX '%d'", menu_win->_begx);
+//	refresh();
+
+//	getch();
+//    mvprintw(21, 0, "@@@@@@@@@@@@@@@@@@@@@@@   '%p' '%d'",  appInfo->win , appInfo->win->_begx );
+//	refresh();
+    mvprintw(21, 0, " "  );
+	print_menu(  appInfo , highlight);
     while(1)
-	{	c = wgetch(menu_win);
+	{	c = wgetch(appInfo->win);
 		switch(c)
 		{	case KEY_UP:
 				if(highlight == 1)
@@ -76,7 +107,9 @@ int manageMenu(WINDOW *menu_win){
 				refresh();
 				break;
 		}
-		print_menu(&menu_win, highlight);
+
+        mvprintw(21, 0, "       %d               ", c );
+		print_menu(   appInfo  , highlight);
 		if(choice != 0)	/* User did a choice come out of the infinite loop */
 			break;
 	}
@@ -85,24 +118,39 @@ int manageMenu(WINDOW *menu_win){
 
 
 
-void print_menu(WINDOW **menu_win, int highlight)
+void print_menu(struct AppInfo   *appInfo, int highlight)
 {
 	int x, y, i;
-
+//    mvprintw(19, 0, "tttttttttttttt  " );
+//    refresh();
+//	getch();
+//    WINDOW *menu_win = *menu_win_;
 	x = 2;
 	y = 2;
-	box(menu_win, 0, 0);
-	getch();
+//    mvprintw(20, 0, "RRRRRRRRRRRRRR  " );
+//    refresh();
+//	getch();
+
+//    mvprintw(22, 0, "TTTTTTTTTTTTT   '%p' '%p' '%d'                                        ",  appInfo->win , appInfo->win , appInfo->win->_begx );
+//	refresh();
+
+//	getch();
+
+//    mvprintw(21, 0, "SSSSSSSSSSSSSSSSSSSSSSSSSss '%d'", appInfo->win->_maxx);
+//	refresh();
+//	getch();
+	box(appInfo->win, 0, 0);
+//	getch();
 	for(i = 0; i < n_choices; ++i)
 	{	if(highlight == i + 1) /* High light the present choice */
-		{	wattron(*menu_win, A_REVERSE);
-			mvwprintw(*menu_win, y, x, "%s", choices[i]);
-			wattroff(*menu_win, A_REVERSE);
+		{	wattron(appInfo->win, A_REVERSE);
+			mvwprintw(appInfo->win, y, x, "%s", choices[i]);
+			wattroff(appInfo->win, A_REVERSE);
 		}
 		else
-			mvwprintw(*menu_win, y, x, "%s", choices[i]);
+			mvwprintw(appInfo->win, y, x, "%s", choices[i]);
 		++y;
 	}
-	wrefresh(*menu_win);
+	wrefresh(appInfo->win);
 }
 

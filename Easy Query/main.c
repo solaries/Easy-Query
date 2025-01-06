@@ -30,10 +30,16 @@
 #include <string.h>
 #include <ctype.h>
 
+#define WIDTH 30
+#define HEIGHT 12
+
 void win_show(WINDOW *win, char *label, int label_color);
 void print_in_middle(WINDOW *win, int starty, int startx, int width, char *string, chtype color);
 void buildInfo( struct AppInfo *appInfo , int fieldSize,char *label,  int yPlus);
 
+
+//int startx = 0;
+//int starty = 0;
 
 int main()
 {
@@ -66,10 +72,19 @@ int main()
     resultSetup( &resultInfo );
 
 
-	WINDOW *menu_win;
-	menuSetup(menu_win);
+    struct AppInfo menuInfo;
+	//WINDOW *menu_win;
 
+//	startx = (80 - WIDTH) / 2;
+//	starty = (24 - HEIGHT) / 2;
+//	menu_win = newwin(HEIGHT, WIDTH, starty -6, startx -21);
 
+	menuSetup(&menuInfo);
+
+//    mvprintw(1, 0, "QQQQQQQQQQQQQQQQQQQQQQ  '%p'", menu_win  );
+//    mvprintw(2, 0, "QQQQQQQQQQQQQQQQQQQQQQ  '%p'", &menu_win  );
+//    //mvprintw(3, 0, "QQQQQQQQQQQQQQQQQQQQQQ  '%p'", *menu_win  );
+	refresh();
     int cmd = manageQuery( &queryInfo ) ;
 
 
@@ -98,7 +113,36 @@ int main()
 
             case 23  :
                 { //ctrl + W - for menu
-                   cmd = manageMenu( menu_win );
+
+//        mvprintw(2, 0, " '%p'  ",  menuInfo );
+//        mvprintw(3, 0, " '%p'  ",  &menuInfo );
+
+
+//    mvprintw(2, 0, "'%p' '%d'",  menuInfo->win , menuInfo->win->_begx );
+//    mvprintw(4, 0, "'%p' '%d'",  (&menuInfo)->win ,  (&menuInfo)->win->_begx );
+//    mvprintw(5, 0, "'%p' '%d'",  (&menuInfo)->win ,  (&menuInfo)->win->_begx );
+//    mvprintw(3, 0, "'%p' '%d'",  &menuInfo->win , &menuInfo->win._begx );
+
+
+        //mvprintw(4, 0, " '%p'  ",  *queryInfo );
+//        getch();
+//    mvprintw(21, 0, "1uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu '%p'  ", menu_win   );
+
+//    mvprintw(22, 0, "2uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu '%p' '%d'", (&menu_win) , &menu_win->_begx);
+
+//    mvprintw(21, 0, "QQQQQQQQQQQQQQQQQQQQQQ  '%p' ", menu_win  );
+//	getch();
+//
+//    mvprintw(22, 0, "QQQQQQQQQQQQQQQQQQQQQQ  '%p' ", &menu_win  );
+//	getch();
+//    mvprintw(23, 0, "QQQQQQQQQQQQQQQQQQQQQQ  '%p' ", *menu_win  );
+//	getch();
+
+//    mvprintw(20, 0, "QQQQQQQQQQQQQQQQQQQQQQ  '%p' %d", &menu_win, &menu_win->_begx  );
+//	refresh();
+
+//	getch();
+                   cmd = manageMenu( &menuInfo );
 //                    return ch;
                 }
                 break;
