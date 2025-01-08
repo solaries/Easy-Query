@@ -38,9 +38,6 @@ void print_in_middle(WINDOW *win, int starty, int startx, int width, char *strin
 void buildInfo( struct AppInfo *appInfo , int fieldSize,char *label,  int yPlus);
 void destroy_win(WINDOW *local_win);
 
-//int startx = 0;
-//int starty = 0;
-
 int main()
 {
 
@@ -61,38 +58,21 @@ int main()
 	init_pair(6, COLOR_WHITE, COLOR_BLUE);
 
 
-    struct AppInfo menuInfo;
-	//WINDOW *menu_win;
-
-//	startx = (80 - WIDTH) / 2;
-//	starty = (24 - HEIGHT) / 2;
-//	menu_win = newwin(HEIGHT, WIDTH, starty -6, startx -21);
-
-
-//	menuSetup(&menuInfo);
-
     struct AppInfo queryInfo;
     buildInfo(&queryInfo  , 75,"Query...",0);
     querySetup( &queryInfo );
-
-
 
     struct AppInfo resultInfo;
     buildInfo(&resultInfo  , 75,"Result...",10);
     resultSetup( &resultInfo );
 
-//    mvprintw(1, 0, "QQQQQQQQQQQQQQQQQQQQQQ  '%p'", menu_win  );
-//    mvprintw(2, 0, "QQQQQQQQQQQQQQQQQQQQQQ  '%p'", &menu_win  );
-//    //mvprintw(3, 0, "QQQQQQQQQQQQQQQQQQQQQQ  '%p'", *menu_win  );
 	refresh();
+
+    struct AppInfo menuInfo;
+    menuSetup(&menuInfo ) ;
+
     int cmd = manageQuery( &queryInfo ) ;
 
-
-//	set_field_fore(queryInfo.field[0], COLOR_PAIR(1));/* Put the field with blue background */
-//	set_field_back(queryInfo.field[0], COLOR_PAIR(2));/* and white foreground (characters */
-
-
-    bool menuOpen  = false;
 
     while(cmd !=24){
 
@@ -120,49 +100,20 @@ int main()
             case 23  :
                 { //ctrl + W - for menu
 
-//        mvprintw(2, 0, " '%p'  ",  menuInfo );
-//        mvprintw(3, 0, " '%p'  ",  &menuInfo );
+                    show_panel((&menuInfo)->panel);
+                    cmd = manageMenu( &menuInfo  );
 
-
-//    mvprintw(2, 0, "'%p' '%d'",  menuInfo->win , menuInfo->win->_begx );
-//    mvprintw(4, 0, "'%p' '%d'",  (&menuInfo)->win ,  (&menuInfo)->win->_begx );
-//    mvprintw(5, 0, "'%p' '%d'",  (&menuInfo)->win ,  (&menuInfo)->win->_begx );
-//    mvprintw(3, 0, "'%p' '%d'",  &menuInfo->win , &menuInfo->win._begx );
-
-
-        //mvprintw(4, 0, " '%p'  ",  *queryInfo );
-//        getch();
-//    mvprintw(21, 0, "1uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu '%p'  ", menu_win   );
-
-//    mvprintw(22, 0, "2uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu '%p' '%d'", (&menu_win) , &menu_win->_begx);
-
-//    mvprintw(21, 0, "QQQQQQQQQQQQQQQQQQQQQQ  '%p' ", menu_win  );
-//	getch();
-//
-//    mvprintw(22, 0, "QQQQQQQQQQQQQQQQQQQQQQ  '%p' ", &menu_win  );
-//	getch();
-//    mvprintw(23, 0, "QQQQQQQQQQQQQQQQQQQQQQ  '%p' ", *menu_win  );
-//	getch();
-
-//    mvprintw(20, 0, "QQQQQQQQQQQQQQQQQQQQQQ  '%p' %d", &menu_win, &menu_win->_begx  );
-//	refresh();
-
-//	getch();
-                    menuOpen  = true;
-                    cmd = manageMenu( &menuInfo ,menuOpen );
-                    menuOpen  = false;
-
-
-                    manageMenu( &menuInfo,menuOpen );
+                    hide_panel((&menuInfo)->panel);
+                    update_panels();
+                    doupdate();
+                    refresh();
 
                     destroy_win((&menuInfo)->win);
-
 
                     box((&queryInfo)->win, 0, 0);
                     wrefresh((&queryInfo)->win);
                     box((&resultInfo)->win, 0, 0);
                     wrefresh((&resultInfo)->win);
-//                    return ch;
                 }
                 break;
 
@@ -194,27 +145,19 @@ int main()
         }
     }
 
-//      cmd = manageQueryField( &queryInfo ) ;
-//    cmd = cmd + 0;
-    //mvprintw(15, 0, "%s" , appInfo.str);
-
-//    mvprintw(15, 0, "string: %s   ",appInfo.queryString );
-    //getch();
-
-
-
-
     // Clean up
-//    delwin(queryWin);
 	unpost_form(queryInfo.form);
 	free_form(queryInfo.form);
 	free_field(queryInfo.field[0]);
+	delwin(queryInfo.win);
 
 	unpost_form(resultInfo.form);
 	free_form(resultInfo.form);
 	free_field(resultInfo.field[0]);
+	delwin(queryInfo.win);
 
 
+	delwin(menuInfo.win);
 
 	endwin();
     return 0;
@@ -241,7 +184,7 @@ void destroy_win(WINDOW *local_win)
 	 * 9. br: character to be used for the bottom right corner of the window
 	 */
 	wrefresh(local_win);
-	delwin(local_win);
+//	delwin(local_win);
 }
 
 
@@ -257,10 +200,6 @@ void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlu
     appInfo->colCur = 1;
     appInfo->charCur = 1;
 
-
-
-
-//	FIELD *queryfield[2];
     appInfo->field[0] = new_field(4, appInfo->fieldSize, 1, 1, 0, 0);
     appInfo->field[1] = NULL;
 	appInfo->form = new_form(appInfo->field);
@@ -268,7 +207,6 @@ void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlu
 	set_field_back(appInfo->field[0], COLOR_PAIR(6));/* and white foreground (characters */
 
     int  rows, cols;
-//    WINDOW *my_query_form_win;
 
 	scale_form(appInfo->form, &rows, &cols);
     appInfo->win = newwin(rows + 5, cols + 2, 1 + yPlus, 1);
@@ -276,45 +214,11 @@ void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlu
     set_form_win(appInfo->form, appInfo->win);
     set_form_sub(appInfo->form, derwin(appInfo->win, rows, cols, 3, 1));
     box(appInfo->win, 0, 0);
-    //win_show(appInfo.my_query_form_win, "...",  1);
-//    print_in_middle(appInfo->win, 1, 0, cols + 4, "Query...", COLOR_PAIR(3));
+
     print_in_middle(appInfo->win, 1, 0, cols + 4, label, COLOR_PAIR(1));
-
-
-// Create a window for the panel
-//WINDOW *queryWin = newwin(10, 78, 1, 1);
-//win_show(queryWin, "Query",  1);
-//box(queryWin, 0, 0);
-//wrefresh(queryWin);
-// Create a panel and associate it with the form
-//PANEL *queryPanel = new_panel(queryWin);
-//PANEL *queryPanel = new_panel(my_query_form_win);
-appInfo->panel = new_panel(appInfo->win);
-//set_panel_userptr(queryPanel, queryForm);
-hide_panel(appInfo->panel);
-//show_panel(queryPanel);
-
-// Draw the panel and refresh the window
-update_panels();
-doupdate();
+    appInfo->panel = new_panel(appInfo->win);
     appInfo->str = "";
-    //querySetup(  queryPanel, my_query_form_win,queryForm       , queryfield      , queryFieldSize, &appInfo.queryString);
-
-
-
-
-
-//    appInfo->str= "XX 3 XXX";
-//    appInfo->str = "DD";
-//    field_opts_off(appInfo->field[0], O_AUTOSKIP);
-//    set_field_opts(appInfo->field[0], O_VISIBLE | O_PUBLIC | O_EDIT | O_ACTIVE | O_WRAP   );
-//
-//    post_form(appInfo->form);
-//	wrefresh(appInfo->win);
-//    set_current_field(appInfo->form, appInfo->field[0]);
-//    setupQueryField( appInfo);
-
-}
+ }
 
 
 void win_show(WINDOW *win, char *label, int label_color)
@@ -322,7 +226,6 @@ void win_show(WINDOW *win, char *label, int label_color)
 
     int /*startx, starty,*/  height, width;
 
-	//getbegyx(win, starty, startx);
 	getmaxyx(win, height, width);
 
 	box(win, 0, 0);
