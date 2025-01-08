@@ -36,7 +36,7 @@
 void win_show(WINDOW *win, char *label, int label_color);
 void print_in_middle(WINDOW *win, int starty, int startx, int width, char *string, chtype color);
 void buildInfo( struct AppInfo *appInfo , int fieldSize,char *label,  int yPlus);
-
+void destroy_win(WINDOW *local_win);
 
 //int startx = 0;
 //int starty = 0;
@@ -47,7 +47,7 @@ int main()
 	initscr();
 	start_color();
 	raw();
-	cbreak();
+//	cbreak(); //this will cause the application to end on ctrl + c
 	noecho();
 	keypad(stdscr, TRUE);
 
@@ -61,6 +61,16 @@ int main()
 	init_pair(6, COLOR_WHITE, COLOR_BLUE);
 
 
+    struct AppInfo menuInfo;
+	//WINDOW *menu_win;
+
+//	startx = (80 - WIDTH) / 2;
+//	starty = (24 - HEIGHT) / 2;
+//	menu_win = newwin(HEIGHT, WIDTH, starty -6, startx -21);
+
+
+//	menuSetup(&menuInfo);
+
     struct AppInfo queryInfo;
     buildInfo(&queryInfo  , 75,"Query...",0);
     querySetup( &queryInfo );
@@ -71,16 +81,6 @@ int main()
     buildInfo(&resultInfo  , 75,"Result...",10);
     resultSetup( &resultInfo );
 
-
-    struct AppInfo menuInfo;
-	//WINDOW *menu_win;
-
-//	startx = (80 - WIDTH) / 2;
-//	starty = (24 - HEIGHT) / 2;
-//	menu_win = newwin(HEIGHT, WIDTH, starty -6, startx -21);
-
-	menuSetup(&menuInfo);
-
 //    mvprintw(1, 0, "QQQQQQQQQQQQQQQQQQQQQQ  '%p'", menu_win  );
 //    mvprintw(2, 0, "QQQQQQQQQQQQQQQQQQQQQQ  '%p'", &menu_win  );
 //    //mvprintw(3, 0, "QQQQQQQQQQQQQQQQQQQQQQ  '%p'", *menu_win  );
@@ -90,7 +90,12 @@ int main()
 
 //	set_field_fore(queryInfo.field[0], COLOR_PAIR(1));/* Put the field with blue background */
 //	set_field_back(queryInfo.field[0], COLOR_PAIR(2));/* and white foreground (characters */
+
+
+    bool menuOpen  = false;
+
     while(cmd !=24){
+
         switch(cmd)
         {
             case 9  :
@@ -101,6 +106,7 @@ int main()
 
             case 27  :
                 { //esc
+
                     cmd = manageQuery( &queryInfo ) ;
                 }
                 break;
@@ -142,7 +148,20 @@ int main()
 //	refresh();
 
 //	getch();
-                   cmd = manageMenu( &menuInfo );
+                    menuOpen  = true;
+                    cmd = manageMenu( &menuInfo ,menuOpen );
+                    menuOpen  = false;
+
+
+                    manageMenu( &menuInfo,menuOpen );
+
+                    destroy_win((&menuInfo)->win);
+
+
+                    box((&queryInfo)->win, 0, 0);
+                    wrefresh((&queryInfo)->win);
+                    box((&resultInfo)->win, 0, 0);
+                    wrefresh((&resultInfo)->win);
 //                    return ch;
                 }
                 break;
@@ -200,6 +219,31 @@ int main()
 	endwin();
     return 0;
 }
+
+
+
+void destroy_win(WINDOW *local_win)
+{
+	/* box(local_win, ' ', ' '); : This won't produce the desired
+	 * result of erasing the window. It will leave it's four corners
+	 * and so an ugly remnant of window.
+	 */
+	wborder(local_win, ' ', ' ', ' ',' ',' ',' ',' ',' ');
+	/* The parameters taken are
+	 * 1. win: the window on which to operate
+	 * 2. ls: character to be used for the left side of the window
+	 * 3. rs: character to be used for the right side of the window
+	 * 4. ts: character to be used for the top side of the window
+	 * 5. bs: character to be used for the bottom side of the window
+	 * 6. tl: character to be used for the top left corner of the window
+	 * 7. tr: character to be used for the top right corner of the window
+	 * 8. bl: character to be used for the bottom left corner of the window
+	 * 9. br: character to be used for the bottom right corner of the window
+	 */
+	wrefresh(local_win);
+	delwin(local_win);
+}
+
 
 void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlus){
 

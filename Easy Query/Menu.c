@@ -21,39 +21,23 @@ char *choices[] = {
 		  };
 
 int n_choices = sizeof(choices) / sizeof(char *);
-void print_menu(struct AppInfo   *appInfo, int highlight);
+void print_menu(struct AppInfo   *appInfo, int highlight, bool activeMenu);
 
 //void menuSetup(WINDOW **menu_win ){
 void menuSetup(struct AppInfo   *appInfo){
-//	int highlight = 1;
-//	int choice = 0;
 
-	startx = (80 - WIDTH) / 2;
-	starty = (24 - HEIGHT) / 2;
-	appInfo->win = newwin(HEIGHT, WIDTH, starty -6, startx -21);
-//mvprintw(1, 0, "XXXXXXXXXXXXXXXXXXXXXXXXXXX" );
-//    mvprintw(9, 0, "1uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu '%p' '%d'", *menu_win , *menu_win._begx);
-//    mvprintw(1, 0, "   '%p' '%d' '%d' '%d'",  appInfo->win , appInfo->win->_begx ,startx,starty );
-    //mvprintw(9, 0, "1uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu '%p'  ", *menu_win );
-	refresh();
 
-//    mvprintw(10, 0, "2uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu '%p'  ", &menu_win  );
-//    mvprintw(10, 0, "2uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu '%p' '%d'", &menu_win , &menu_win._begx);
-//	refresh();
-
-	keypad(appInfo->win, TRUE);
-	refresh();
-
-//    mvprintw(10, 0, "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu '%d'", &menu_win->_begx);
-//	refresh();
-	//
+//	startx = (80 - WIDTH) / 2;
+//	starty = (24 - HEIGHT) / 2;
+//	appInfo->win = newwin(HEIGHT, WIDTH, starty -6, startx -21);
+//	keypad(appInfo->win, TRUE);
 
 
 }
 
 
 //int manageMenu(WINDOW *menu_win){
-int manageMenu(struct AppInfo   *appInfo){
+int manageMenu(struct AppInfo   *appInfo, bool activeMenu){
 	int highlight = 1;
 	int choice = 0;
 	int c;
@@ -71,8 +55,27 @@ int manageMenu(struct AppInfo   *appInfo){
 //	getch();
 //    mvprintw(21, 0, "@@@@@@@@@@@@@@@@@@@@@@@   '%p' '%d'",  appInfo->win , appInfo->win->_begx );
 //	refresh();
+
+	startx = (80 - WIDTH) / 2;
+	starty = (24 - HEIGHT) / 2;
+	if(!activeMenu){
+
+
+
+
+        print_menu(  appInfo , highlight,   activeMenu);
+        //mvprintw(20, 0, "yyyyyyyyyyyyyyyyyyyyyyyyyyy  "  );
+//        refresh();
+//        getch();
+        return 0;
+	}
+	appInfo->win = newwin(HEIGHT, WIDTH, starty -6, startx -21);
+
+	keypad(appInfo->win, TRUE);
+
+
     mvprintw(21, 0, " "  );
-	print_menu(  appInfo , highlight);
+	print_menu(  appInfo , highlight,   activeMenu);
     while(1)
 	{	c = wgetch(appInfo->win);
 		switch(c)
@@ -109,7 +112,7 @@ int manageMenu(struct AppInfo   *appInfo){
 		}
 
         mvprintw(21, 0, "       %d               ", c );
-		print_menu(   appInfo  , highlight);
+		print_menu(   appInfo  , highlight,   activeMenu);
 		if(choice != 0)	/* User did a choice come out of the infinite loop */
 			break;
 	}
@@ -118,7 +121,7 @@ int manageMenu(struct AppInfo   *appInfo){
 
 
 
-void print_menu(struct AppInfo   *appInfo, int highlight)
+void print_menu(struct AppInfo   *appInfo, int highlight, bool activeMenu)
 {
 	int x, y, i;
 //    mvprintw(19, 0, "tttttttttttttt  " );
@@ -142,13 +145,26 @@ void print_menu(struct AppInfo   *appInfo, int highlight)
 	box(appInfo->win, 0, 0);
 //	getch();
 	for(i = 0; i < n_choices; ++i)
-	{	if(highlight == i + 1) /* High light the present choice */
-		{	wattron(appInfo->win, A_REVERSE);
-			mvwprintw(appInfo->win, y, x, "%s", choices[i]);
-			wattroff(appInfo->win, A_REVERSE);
-		}
-		else
-			mvwprintw(appInfo->win, y, x, "%s", choices[i]);
+	{
+        if(activeMenu){
+            if(highlight == i + 1) /* High light the present choice */
+            {	wattron(appInfo->win, A_REVERSE);
+                mvwprintw(appInfo->win, y, x, "%s", choices[i]);
+                wattroff(appInfo->win, A_REVERSE);
+            }
+            else{
+//                wattron(appInfo->win, A_INVIS);
+                mvwprintw(appInfo->win, y, x, "%s", choices[i]);
+//                wattroff(appInfo->win, A_INVIS);
+
+            }
+        }
+        else{
+
+                wattron(appInfo->win, A_INVIS);
+                mvwprintw(appInfo->win, y, x, "%s", choices[i]);
+                wattroff(appInfo->win, A_INVIS);
+        }
 		++y;
 	}
 	wrefresh(appInfo->win);

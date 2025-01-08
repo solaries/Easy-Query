@@ -10,7 +10,7 @@ void menuSetup(struct AppInfo   *appInfo);
 
 
 //int manageMenu(WINDOW *menu_win) ;
-int manageMenu(struct AppInfo   *appInfo) ;
+int manageMenu(struct AppInfo   *appInfo, bool activeMenu) ;
 
 
 
