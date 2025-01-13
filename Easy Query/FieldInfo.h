@@ -9,7 +9,15 @@ struct AppInfo {
 	PANEL *panel;
 	WINDOW *win;
 	FORM  *form;
-	FIELD *field[2] ;
+
+	FIELD **field2;
+
+    int numberOfFields ;
+    int numberOfRows ;
+    int fieldXPosition ;
+    int windXPosition ;
+
+//	FIELD *field[2] ;
 	int fieldSize;
 	char *str  ;
 

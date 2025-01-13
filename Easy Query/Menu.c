@@ -28,13 +28,21 @@ void menuSetup(struct AppInfo   *appInfo){
 
 	startx = (80 - WIDTH) / 2;
 	starty = (24 - HEIGHT) / 2;
-	appInfo->win = newwin(HEIGHT, WIDTH, starty -6, startx -21);
-
+	appInfo->win = newwin(HEIGHT, WIDTH, starty -6, startx -24);
+    appInfo->panel = new_panel(appInfo->win);
 	keypad(appInfo->win, TRUE);
 }
 
 
 int manageMenu(struct AppInfo   *appInfo ){
+
+//    mvprintw(22, 0, "Ctrl + Q or ESC: Query,  Ctrl + E : Execute,   Ctrl + R: Result" );
+    mvprintw(22, 0, "Ctrl + Q or ESC: Query                                                     " );
+//    mvprintw(23, 0, "Ctrl + W: Menu,  Alt + X: Exit, Space: toggle Select" );
+    mvprintw(23, 0, "Alt + X: Exit                                                              " );
+
+    refresh();
+
 	int highlight = 1;
 	int choice = 0;
 	int c;
@@ -60,7 +68,17 @@ int manageMenu(struct AppInfo   *appInfo ){
 
             case 27  :
                 { //esc
-                    return 27;
+                    return c;
+                }
+                break;
+            case 17  :
+                { //ctrl + Q
+                    return c;
+                }
+                break;
+            case 24  :
+                { //ctrl + x
+                    return c;
                 }
                 break;
 			default:

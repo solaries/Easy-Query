@@ -37,6 +37,7 @@ void win_show(WINDOW *win, char *label, int label_color);
 void print_in_middle(WINDOW *win, int starty, int startx, int width, char *string, chtype color);
 void buildInfo( struct AppInfo *appInfo , int fieldSize,char *label,  int yPlus);
 void destroy_win(WINDOW *local_win);
+void freeFields(struct AppInfo   *appInfo );
 
 int main()
 {
@@ -54,15 +55,23 @@ int main()
 	init_pair(4, COLOR_CYAN, COLOR_BLACK);
 
 
+	init_pair(6, COLOR_BLACK, COLOR_WHITE);
 	init_pair(5, COLOR_WHITE, COLOR_BLUE);
-	init_pair(6, COLOR_WHITE, COLOR_BLUE);
 
 
     struct AppInfo queryInfo;
+    queryInfo.numberOfFields = 1;
+    queryInfo.fieldXPosition = 1;
+    queryInfo.windXPosition = 1;
+    queryInfo.numberOfRows = 4;
     buildInfo(&queryInfo  , 75,"Query...",0);
     querySetup( &queryInfo );
 
     struct AppInfo resultInfo;
+    resultInfo.numberOfFields = 1;
+    resultInfo.fieldXPosition = 1;
+    resultInfo.windXPosition = 1;
+    resultInfo.numberOfRows = 4;
     buildInfo(&resultInfo  , 75,"Result...",10);
     resultSetup( &resultInfo );
 
@@ -71,18 +80,35 @@ int main()
     struct AppInfo menuInfo;
     menuSetup(&menuInfo ) ;
 
-    int cmd = manageQuery( &queryInfo ) ;
 
+
+    struct AppInfo serverConnectInfo;
+    serverConnectInfo.numberOfFields = 3;
+    serverConnectInfo.numberOfRows = 1;
+    serverConnectInfo.windXPosition = 3;
+    serverConnectInfo.fieldXPosition = 20;
+    buildInfo(&serverConnectInfo  , 50,"Server Connection...",3);
+    serverConnectionSetup( &serverConnectInfo );
+
+
+
+
+    hide_panel((&menuInfo)->panel);
+    hide_panel((&serverConnectInfo)->panel);
+    update_panels();
+    doupdate();
+
+    int cmd = manageQuery( &queryInfo ) ;
 
     while(cmd !=24){
 
         switch(cmd)
         {
-            case 9  :
-                { //tab
-//                    return ch;
-                }
-                break;
+//            case 9  :
+//                { //tab
+////                    return ch;
+//                }
+//                break;
 
             case 27  :
                 { //esc
@@ -129,13 +155,11 @@ int main()
                    cmd =  manageResult( &resultInfo ) ;
                 }
                 break;
-
-
-            case 24  :
-                { //ctrl + x
-//                    return ch;
-                }
-                break;
+//            case 24  :
+//                { //ctrl + x
+////                    return ch;
+//                }
+//                break;
             default:
 
                 {
@@ -148,14 +172,20 @@ int main()
     // Clean up
 	unpost_form(queryInfo.form);
 	free_form(queryInfo.form);
-	free_field(queryInfo.field[0]);
+//	free_field(queryInfo.field[0]);
+    freeFields(&queryInfo);
 	delwin(queryInfo.win);
 
 	unpost_form(resultInfo.form);
 	free_form(resultInfo.form);
-	free_field(resultInfo.field[0]);
+//	free_field(resultInfo.field[0]);
+    freeFields(&resultInfo);
 	delwin(queryInfo.win);
 
+	unpost_form(serverConnectInfo.form);
+	free_form(serverConnectInfo.form);
+    freeFields(&serverConnectInfo);
+	delwin(serverConnectInfo.win);
 
 	delwin(menuInfo.win);
 
@@ -164,6 +194,11 @@ int main()
 }
 
 
+void freeFields(struct AppInfo   *appInfo ){
+    for (int i =0; i < appInfo->numberOfFields;i++){
+        free_field(appInfo->field2[i]);
+    }
+}
 
 void destroy_win(WINDOW *local_win)
 {
@@ -199,17 +234,40 @@ void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlu
     appInfo->rowCur = 1;
     appInfo->colCur = 1;
     appInfo->charCur = 1;
+    appInfo->field2 = malloc((appInfo->numberOfFields + 1) * sizeof(FIELD *));
 
-    appInfo->field[0] = new_field(4, appInfo->fieldSize, 1, 1, 0, 0);
-    appInfo->field[1] = NULL;
-	appInfo->form = new_form(appInfo->field);
-	set_field_fore(appInfo->field[0], COLOR_PAIR(5));/* Put the field with blue background */
-	set_field_back(appInfo->field[0], COLOR_PAIR(6));/* and white foreground (characters */
+    for (int i =0; i < appInfo->numberOfFields;i++){
+        appInfo->field2[i] = new_field(  appInfo->numberOfRows , appInfo->fieldSize, 1 + (i * 2), appInfo->fieldXPosition, 0, 0);
+
+        set_field_fore(appInfo->field2[i], COLOR_PAIR(5));/* Put the field with blue background */
+        set_field_back(appInfo->field2[i], COLOR_PAIR(5));/* and white foreground (characters */
+
+
+        if(i==0){
+
+//	set_field_fore(appInfo->field2[0], COLOR_PAIR(5));/* Put the field with blue background */
+//	set_field_back(appInfo->field2[0], COLOR_PAIR(6));/* and white foreground (characters */
+
+        }
+    }
+    appInfo->field2[appInfo->numberOfFields] = NULL;
+
+//    appInfo->field[0] = new_field(4, appInfo->fieldSize, 1, 1, 0, 0);
+//    appInfo->field[1] = NULL;
+
+
+
+
+
+	appInfo->form = new_form(appInfo->field2);
+//	set_field_fore(appInfo->field[0], COLOR_PAIR(5));/* Put the field with blue background */
+//	set_field_back(appInfo->field[0], COLOR_PAIR(6));/* and white foreground (characters */
 
     int  rows, cols;
 
 	scale_form(appInfo->form, &rows, &cols);
-    appInfo->win = newwin(rows + 5, cols + 2, 1 + yPlus, 1);
+//    appInfo->win = newwin(rows + 5, cols + 2, 1 + yPlus, 1);
+    appInfo->win = newwin(rows + 5, cols + 2, 1 + yPlus, appInfo->windXPosition);
     keypad(appInfo->win, TRUE);
     set_form_win(appInfo->form, appInfo->win);
     set_form_sub(appInfo->form, derwin(appInfo->win, rows, cols, 3, 1));
