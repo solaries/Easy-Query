@@ -9,7 +9,6 @@ struct AppInfo {
 	PANEL *panel;
 	WINDOW *win;
 	FORM  *form;
-
 	FIELD **field2;
 
     int numberOfFields ;
@@ -28,12 +27,9 @@ struct AppInfo {
     int rowCur  ;
     int colCur  ;
     int charCur ;
-
-
+	char **labels;
 	FIELD **multiField ;
 	char *strMsg  ;
-
-
 	bool msg;
 };
 

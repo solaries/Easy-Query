@@ -57,6 +57,7 @@ int main()
 
 	init_pair(6, COLOR_BLACK, COLOR_WHITE);
 	init_pair(5, COLOR_WHITE, COLOR_BLUE);
+	init_pair(7, COLOR_BLACK, COLOR_CYAN);
 
 
     struct AppInfo queryInfo;
@@ -83,15 +84,20 @@ int main()
 
 
     struct AppInfo serverConnectInfo;
-    serverConnectInfo.numberOfFields = 3;
+    serverConnectInfo.numberOfFields = 9;
     serverConnectInfo.numberOfRows = 1;
     serverConnectInfo.windXPosition = 3;
-    serverConnectInfo.fieldXPosition = 20;
+    serverConnectInfo.fieldXPosition = 12;
+    serverConnectInfo.labels = malloc(3 * sizeof(char *));
+
+    serverConnectInfo.labels[0] = "Server: ";
+    serverConnectInfo.labels[1] = "User:";
+    serverConnectInfo.labels[2] = "Password: " ;
     buildInfo(&serverConnectInfo  , 50,"Server Connection...",3);
     serverConnectionSetup( &serverConnectInfo );
 
 
-
+getch();
 
     hide_panel((&menuInfo)->panel);
     hide_panel((&serverConnectInfo)->panel);
@@ -236,11 +242,38 @@ void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlu
     appInfo->charCur = 1;
     appInfo->field2 = malloc((appInfo->numberOfFields + 1) * sizeof(FIELD *));
 
-    for (int i =0; i < appInfo->numberOfFields;i++){
-        appInfo->field2[i] = new_field(  appInfo->numberOfRows , appInfo->fieldSize, 1 + (i * 2), appInfo->fieldXPosition, 0, 0);
 
-        set_field_fore(appInfo->field2[i], COLOR_PAIR(5));/* Put the field with blue background */
-        set_field_back(appInfo->field2[i], COLOR_PAIR(5));/* and white foreground (characters */
+//mvprintw(14, 10, "Value 1:");
+
+
+
+
+
+	refresh();
+    for (int i =0; i < appInfo->numberOfFields;i++){
+        if(i % 3 == 1 ){
+            appInfo->field2[i] = new_field(  appInfo->numberOfRows , appInfo->fieldSize - 41 ,   (i / 3) * 2 , 2, 0, 0);
+//            set_field_fore(appInfo->field2[i], COLOR_PAIR(6));/* Put the field with blue background */
+//            set_field_back(appInfo->field2[i], COLOR_PAIR(6));/* and white foreground (characters   2 4 6    3 5 7 */
+
+
+            field_opts_off(appInfo->field2[i], O_ACTIVE);
+            set_field_buffer(appInfo->field2[i], 0, appInfo->labels[( i / 3) ]);
+
+//            mvprintw(23, 0, "%d" , appInfo->fieldXPosition );
+        }
+        else if(i % 3 ==2 ){
+            appInfo->field2[i] = new_field(  appInfo->numberOfRows , appInfo->fieldSize - 47 ,     ( i / 3) * 2  , 63, 0, 0);
+//            set_field_fore(appInfo->field2[i], COLOR_PAIR(7));/* Put the field with blue background */
+//            set_field_back(appInfo->field2[i], COLOR_PAIR(7));/* and white foreground (characters   2 4 6    3 5 7 */
+//            mvprintw(23, 0, "%d" , appInfo->fieldXPosition );
+        }
+        else{
+//            appInfo->field2[i] = new_field(  appInfo->numberOfRows , appInfo->fieldSize, 1 + (i * 2) , appInfo->fieldXPosition, 0, 0);
+            appInfo->field2[i] = new_field(  appInfo->numberOfRows , appInfo->fieldSize,    ( i  / 3 ) * 2 , appInfo->fieldXPosition, 0, 0);
+            set_field_fore(appInfo->field2[i], COLOR_PAIR(5));/* Put the field with blue background */
+            set_field_back(appInfo->field2[i], COLOR_PAIR(5));/* and white foreground (characters */
+        }
 
 
         if(i==0){
@@ -276,6 +309,15 @@ void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlu
     print_in_middle(appInfo->win, 1, 0, cols + 4, label, COLOR_PAIR(1));
     appInfo->panel = new_panel(appInfo->win);
     appInfo->str = "";
+
+
+
+
+	wattron(appInfo->win, COLOR_PAIR(1));
+//	mvwprintw(appInfo->win, 2, 3, "%s", "Value 1:");
+	wattroff(appInfo->win, COLOR_PAIR(1));
+	refresh();
+
  }
 
 
