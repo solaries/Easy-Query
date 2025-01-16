@@ -38,6 +38,8 @@ void print_in_middle(WINDOW *win, int starty, int startx, int width, char *strin
 void buildInfo( struct AppInfo *appInfo , int fieldSize,char *label,  int yPlus);
 void destroy_win(WINDOW *local_win);
 void freeFields(struct AppInfo   *appInfo );
+void closePanel(struct AppInfo   *appInfo ,struct AppInfo   *queryInfo ,struct AppInfo   *resultInfo  );
+
 
 int main()
 {
@@ -65,6 +67,10 @@ int main()
     queryInfo.fieldXPosition = 1;
     queryInfo.windXPosition = 1;
     queryInfo.numberOfRows = 4;
+    queryInfo.str = malloc(1 * sizeof(char *));
+    queryInfo.isPassword = malloc(1 * sizeof(bool *));
+    queryInfo.isPassword[0] = malloc(sizeof(bool));
+    *queryInfo.isPassword[0] = false;
     buildInfo(&queryInfo  , 75,"Query...",0);
     querySetup( &queryInfo );
 
@@ -73,6 +79,9 @@ int main()
     resultInfo.fieldXPosition = 1;
     resultInfo.windXPosition = 1;
     resultInfo.numberOfRows = 4;
+    resultInfo.isPassword = malloc(1 * sizeof(bool *));
+    resultInfo.isPassword[0] = malloc(sizeof(bool));
+    *resultInfo.isPassword[0] = false;
     buildInfo(&resultInfo  , 75,"Result...",10);
     resultSetup( &resultInfo );
 
@@ -88,7 +97,16 @@ int main()
     serverConnectInfo.numberOfRows = 1;
     serverConnectInfo.windXPosition = 3;
     serverConnectInfo.fieldXPosition = 12;
+    serverConnectInfo.str = malloc(3 * sizeof(char *));
     serverConnectInfo.labels = malloc(3 * sizeof(char *));
+    serverConnectInfo.isPassword = malloc(3 * sizeof(bool *));
+    serverConnectInfo.isPassword[0] = malloc(sizeof(bool));
+    serverConnectInfo.isPassword[1] = malloc(sizeof(bool));
+    serverConnectInfo.isPassword[2] = malloc(sizeof(bool));
+    *serverConnectInfo.isPassword[0] = false;
+    *serverConnectInfo.isPassword[1] = false;
+    *serverConnectInfo.isPassword[2] = true;
+//    serverConnectInfo.isPassword[2] = serverConnectInfo.isPassword[1];
 
     serverConnectInfo.labels[0] = "Server: ";
     serverConnectInfo.labels[1] = "User:";
@@ -97,7 +115,7 @@ int main()
     serverConnectionSetup( &serverConnectInfo );
 
 
-getch();
+//getch();
 
     hide_panel((&menuInfo)->panel);
     hide_panel((&serverConnectInfo)->panel);
@@ -116,6 +134,13 @@ getch();
 //                }
 //                break;
 
+            case 1  :
+                { //Server Connection Is selected
+                    show_panel((&serverConnectInfo)->panel);
+                    cmd = manageServerConnection( &serverConnectInfo  );
+                    closePanel( &serverConnectInfo ,&queryInfo ,&resultInfo  );
+                }
+                break;
             case 27  :
                 { //esc
 
@@ -134,18 +159,7 @@ getch();
 
                     show_panel((&menuInfo)->panel);
                     cmd = manageMenu( &menuInfo  );
-
-                    hide_panel((&menuInfo)->panel);
-                    update_panels();
-                    doupdate();
-                    refresh();
-
-                    destroy_win((&menuInfo)->win);
-
-                    box((&queryInfo)->win, 0, 0);
-                    wrefresh((&queryInfo)->win);
-                    box((&resultInfo)->win, 0, 0);
-                    wrefresh((&resultInfo)->win);
+                    closePanel( &menuInfo ,&queryInfo ,&resultInfo  );
                 }
                 break;
 
@@ -199,7 +213,37 @@ getch();
     return 0;
 }
 
+void closePanel(struct AppInfo   *appInfo ,struct AppInfo   *queryInfo ,struct AppInfo   *resultInfo  ){
 
+    destroy_win(appInfo->win);
+//getch();
+    hide_panel(appInfo->panel);
+    update_panels();
+    doupdate();
+//getch();
+    refresh();
+
+//getch();
+    box(queryInfo->win, 0, 0);
+    wrefresh(queryInfo->win);
+//getch();
+    box(resultInfo->win, 0, 0);
+    wrefresh(resultInfo->win);
+
+//getch();
+//    hide_panel((&menuInfo)->panel);
+//    update_panels();
+//    doupdate();
+//    refresh();
+//
+//    destroy_win((&menuInfo)->win);
+//
+//    box((&queryInfo)->win, 0, 0);
+//    wrefresh((&queryInfo)->win);
+//    box((&resultInfo)->win, 0, 0);
+//    wrefresh((&resultInfo)->win);
+
+}
 void freeFields(struct AppInfo   *appInfo ){
     for (int i =0; i < appInfo->numberOfFields;i++){
         free_field(appInfo->field2[i]);
@@ -253,35 +297,26 @@ void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlu
     for (int i =0; i < appInfo->numberOfFields;i++){
         if(i % 3 == 1 ){
             appInfo->field2[i] = new_field(  appInfo->numberOfRows , appInfo->fieldSize - 41 ,   (i / 3) * 2 , 2, 0, 0);
-//            set_field_fore(appInfo->field2[i], COLOR_PAIR(6));/* Put the field with blue background */
-//            set_field_back(appInfo->field2[i], COLOR_PAIR(6));/* and white foreground (characters   2 4 6    3 5 7 */
-
-
             field_opts_off(appInfo->field2[i], O_ACTIVE);
             set_field_buffer(appInfo->field2[i], 0, appInfo->labels[( i / 3) ]);
 
-//            mvprintw(23, 0, "%d" , appInfo->fieldXPosition );
+
+            appInfo->str[( i / 3)] = "";
+
         }
         else if(i % 3 ==2 ){
             appInfo->field2[i] = new_field(  appInfo->numberOfRows , appInfo->fieldSize - 47 ,     ( i / 3) * 2  , 63, 0, 0);
-//            set_field_fore(appInfo->field2[i], COLOR_PAIR(7));/* Put the field with blue background */
-//            set_field_back(appInfo->field2[i], COLOR_PAIR(7));/* and white foreground (characters   2 4 6    3 5 7 */
-//            mvprintw(23, 0, "%d" , appInfo->fieldXPosition );
         }
         else{
-//            appInfo->field2[i] = new_field(  appInfo->numberOfRows , appInfo->fieldSize, 1 + (i * 2) , appInfo->fieldXPosition, 0, 0);
             appInfo->field2[i] = new_field(  appInfo->numberOfRows , appInfo->fieldSize,    ( i  / 3 ) * 2 , appInfo->fieldXPosition, 0, 0);
             set_field_fore(appInfo->field2[i], COLOR_PAIR(5));/* Put the field with blue background */
             set_field_back(appInfo->field2[i], COLOR_PAIR(5));/* and white foreground (characters */
+            if(*appInfo->isPassword[i/3]){
+                field_opts_off(appInfo->field2[i], O_PUBLIC);
+            }
         }
 
 
-        if(i==0){
-
-//	set_field_fore(appInfo->field2[0], COLOR_PAIR(5));/* Put the field with blue background */
-//	set_field_back(appInfo->field2[0], COLOR_PAIR(6));/* and white foreground (characters */
-
-        }
     }
     appInfo->field2[appInfo->numberOfFields] = NULL;
 
@@ -308,7 +343,6 @@ void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlu
 
     print_in_middle(appInfo->win, 1, 0, cols + 4, label, COLOR_PAIR(1));
     appInfo->panel = new_panel(appInfo->win);
-    appInfo->str = "";
 
 
 

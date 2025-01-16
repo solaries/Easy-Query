@@ -26,9 +26,9 @@ void resultSetup(struct AppInfo   *appInfo){
 
 int manageResult(struct AppInfo   *appInfo){
     int ch;
-    appInfo->str= "XX 3 XXX";
-    appInfo->str = "DD";
-    set_field_buffer(appInfo->field2[0], 0, appInfo->str);
+//    appInfo->str= "XX 3 XXX";
+//    appInfo->str = "DD";
+//    set_field_buffer(appInfo->field2[0], 0, appInfo->str);
     set_current_field(appInfo->form, appInfo->field2[0]);
 //    return ( appInfo);
 

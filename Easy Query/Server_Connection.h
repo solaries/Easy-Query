@@ -9,7 +9,7 @@
 
 //serverConnection
     void serverConnectionSetup( struct AppInfo *appInfo);
-    int serverConnectionQuery( struct AppInfo *appInfo);
+    int manageServerConnection( struct AppInfo *appInfo);
 
 
 

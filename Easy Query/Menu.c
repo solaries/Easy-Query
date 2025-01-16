@@ -37,9 +37,9 @@ void menuSetup(struct AppInfo   *appInfo){
 int manageMenu(struct AppInfo   *appInfo ){
 
 //    mvprintw(22, 0, "Ctrl + Q or ESC: Query,  Ctrl + E : Execute,   Ctrl + R: Result" );
-    mvprintw(22, 0, "Ctrl + Q or ESC: Query                                                     " );
+    mvprintw(22, 0, "Ctrl + Q or ESC: Query , Enter : Select menu item                        " );
 //    mvprintw(23, 0, "Ctrl + W: Menu,  Alt + X: Exit, Space: toggle Select" );
-    mvprintw(23, 0, "Alt + X: Exit                                                              " );
+    mvprintw(23, 0, "UP: UP, Down: Down , Alt + X: Exit                                                              " );
 
     refresh();
 
@@ -64,6 +64,7 @@ int manageMenu(struct AppInfo   *appInfo ){
 				break;
 			case 10:
 				choice = highlight;
+				return choice;
 				break;
 
             case 27  :

@@ -18,7 +18,8 @@ struct AppInfo {
 
 //	FIELD *field[2] ;
 	int fieldSize;
-	char *str  ;
+	char **str  ;
+	bool **isPassword  ;
 
 
 
