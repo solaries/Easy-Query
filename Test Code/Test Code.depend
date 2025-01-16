@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1735378503 source:/home/sphinx/code/c_programs/easy_query/Test Code/main.c
+	<ncurses.h>
+	<form.h>
+	<assert.h>
+	<string.h>
+	<stdlib.h>
+	<ctype.h>
+

@@ -31,7 +31,15 @@ void serverConnectionSetup(struct AppInfo   *appInfo){
 //            set_field_fore(appInfo->field2[i], COLOR_PAIR(5));/* Put the field with blue background */
 //            set_field_back(appInfo->field2[i], COLOR_PAIR(5));/* and white foreground (characters */
             field_opts_off(appInfo->field2[i], O_AUTOSKIP);
-            set_field_opts(appInfo->field2[i], O_VISIBLE | O_PUBLIC | O_EDIT | O_ACTIVE  );
+            set_field_opts(appInfo->field2[i], O_VISIBLE  | O_EDIT | O_ACTIVE  );
+
+
+            if(*appInfo->isPassword[i/3]){
+                field_opts_off(appInfo->field2[i], O_PUBLIC);
+            }
+            else{
+                field_opts_on(appInfo->field2[i], O_PUBLIC);
+            }
         }
     }
     post_form(appInfo->form);
@@ -50,9 +58,12 @@ int manageServerConnection(struct AppInfo   *appInfo){
 //    mvprintw(22, 0, "Ctrl + Q or ESC: Query,  Ctrl + E : Execute,   Ctrl + R: Result" );
     mvprintw(22, 0, "ESC : Close Dailog and return to query                            " );
 //    mvprintw(23, 0, "Ctrl + W: Menu,  Alt + X: Exit, Space: toggle Select" );
-//    mvprintw(23, 0, "Ctrl + W: Menu,  Alt + X: Exit                                    " );
+    mvprintw(23, 0, "UP: UP, Down: Down                                                " );
 
 
+	box(appInfo->win, 0, 0);
+
+	wrefresh(appInfo->win);
 
 
     while((ch = manageQueryField( appInfo)) !=0)

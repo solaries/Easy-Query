@@ -60,7 +60,7 @@ int manageQueryField( struct AppInfo   *appInfo){
 //    mvprintw(22, 0, "Ctrl + Q or ESC: Query,  Ctrl + E : Execute,   Ctrl + R: Result" );
 //    mvprintw(23, 0, "Ctrl + W: Menu,  Ctrl + X: Exit, Space: toggle Select" );
     refresh();
-    set_current_field(appInfo->form, appInfo->field2[0]); /* Set focus to the colored field */
+    set_current_field(appInfo->form, appInfo->field2[curField]); /* Set focus to the colored field */
     form_driver(appInfo->form, '\0');
 
     int countt = 0;
@@ -200,7 +200,7 @@ int manageQueryField( struct AppInfo   *appInfo){
                 {
                     if(charCur -1 < charCount && charCur >= 1){
                         form_driver(appInfo->form, REQ_VALIDATION);
-                        char * theTextCurrent= field_buffer(appInfo->field2[0], 0) ;
+                        char * theTextCurrent= field_buffer(appInfo->field2[curField], 0) ;
                         char theText[charCount   -1];
                         int j =0;
                         for(int i =0;i < charCount+1;i++){
@@ -214,7 +214,7 @@ int manageQueryField( struct AppInfo   *appInfo){
                         }
                         charCur++;
                         theText[charCount -1  ] = '\0';
-                        set_field_buffer(appInfo->field2[0], 0, theText);
+                        set_field_buffer(appInfo->field2[curField], 0, theText);
                         charCount -=1;
                         charCur -=1;
                         rowCur = ((charCur -1) / colSize) + 1  ;
@@ -259,7 +259,7 @@ int manageQueryField( struct AppInfo   *appInfo){
                 {
                     form_driver(appInfo->form, REQ_VALIDATION);
                     int extraChar = colSize -    colCur;
-                    char * theTextCurrent= field_buffer(appInfo->field2[0], 0) ;
+                    char * theTextCurrent= field_buffer(appInfo->field2[curField], 0) ;
                     char theText[charCount   + extraChar + 1];
                     int j =0;
                     for(int i =0;i <= charCount   + extraChar +1;i++){
@@ -275,7 +275,7 @@ int manageQueryField( struct AppInfo   *appInfo){
                         j++;
                     }
                     theText[charCount + extraChar + 1  ] = '\0';
-                    set_field_buffer(appInfo->field2[0], 0, theText);
+                    set_field_buffer(appInfo->field2[curField], 0, theText);
                     charCount +=1  + extraChar;
                     charCur +=1  + extraChar;
                     rowCur = ((charCur -1) / colSize) + 1  ;
@@ -303,7 +303,7 @@ int manageQueryField( struct AppInfo   *appInfo){
                 {
                     if(charCur -2 < charCount && charCur >= 2){
                         form_driver(appInfo->form, REQ_VALIDATION);
-                        char * theTextCurrent= field_buffer(appInfo->field2[0], 0) ;
+                        char * theTextCurrent= field_buffer(appInfo->field2[curField], 0) ;
                         char theText[charCount   -1];
                         int j =0;
                         for(int i =0;i < charCount+1;i++){
@@ -314,7 +314,7 @@ int manageQueryField( struct AppInfo   *appInfo){
                             j++;
                         }
                         theText[charCount -1  ] = '\0';
-                        set_field_buffer(appInfo->field2[0], 0, theText);
+                        set_field_buffer(appInfo->field2[curField], 0, theText);
                         charCount -=1;
                         charCur -=1;
                         rowCur = ((charCur -1) / colSize) + 1  ;
@@ -331,6 +331,7 @@ int manageQueryField( struct AppInfo   *appInfo){
                         for (int i = 1; i < colCur;i++){
                             form_driver(appInfo->form, REQ_NEXT_CHAR);
                         }
+                        mvprintw(22, 55, ".%s.", theText);
                     }
                     mvprintw(23, 75, "%d", ch);
                     mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
@@ -345,7 +346,7 @@ int manageQueryField( struct AppInfo   *appInfo){
                         if(charCur < charCount){
                             doMovenext = true;
                             form_driver(appInfo->form, REQ_VALIDATION);
-                            char * theTextCurrent= field_buffer(appInfo->field2[0], 0) ;
+                            char * theTextCurrent= field_buffer(appInfo->field2[curField], 0) ;
                             char theText[charCount  + 2];
                             int j =0;
                             for(int i =0;i < charCount+1;i++){
@@ -358,7 +359,7 @@ int manageQueryField( struct AppInfo   *appInfo){
                                 j++;
                             }
                             theText[charCount +1  ] = '\0';
-                            set_field_buffer(appInfo->field2[0], 0, theText);
+                            set_field_buffer(appInfo->field2[curField], 0, theText);
                             for (int i = 1; i < rowCur     ;i++){
                                 form_driver(appInfo->form, REQ_NEXT_LINE);
                             }

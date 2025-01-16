@@ -311,8 +311,15 @@ void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlu
             appInfo->field2[i] = new_field(  appInfo->numberOfRows , appInfo->fieldSize,    ( i  / 3 ) * 2 , appInfo->fieldXPosition, 0, 0);
             set_field_fore(appInfo->field2[i], COLOR_PAIR(5));/* Put the field with blue background */
             set_field_back(appInfo->field2[i], COLOR_PAIR(5));/* and white foreground (characters */
+
+
+
+
             if(*appInfo->isPassword[i/3]){
-                field_opts_off(appInfo->field2[i], O_PUBLIC);
+              //  field_opts_off(appInfo->field2[i], O_PUBLIC);
+            }
+            else{
+                field_opts_on(appInfo->field2[i], O_PUBLIC);
             }
         }
 
