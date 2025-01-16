@@ -38,6 +38,8 @@ void print_in_middle(WINDOW *win, int starty, int startx, int width, char *strin
 void buildInfo( struct AppInfo *appInfo , int fieldSize,char *label,  int yPlus);
 void destroy_win(WINDOW *local_win);
 void freeFields(struct AppInfo   *appInfo );
+void prepLocationAndPassword(struct AppInfo   *appInfo , int num);
+void freeLocationAndPassword(struct AppInfo   *appInfo , int num);
 void closePanel(struct AppInfo   *appInfo ,struct AppInfo   *queryInfo ,struct AppInfo   *resultInfo  );
 
 
@@ -67,9 +69,18 @@ int main()
     queryInfo.fieldXPosition = 1;
     queryInfo.windXPosition = 1;
     queryInfo.numberOfRows = 4;
+
     queryInfo.str = malloc(1 * sizeof(char *));
-    queryInfo.isPassword = malloc(1 * sizeof(bool *));
-    queryInfo.isPassword[0] = malloc(sizeof(bool));
+    prepLocationAndPassword(&queryInfo  ,   1) ;
+//    queryInfo.isPassword = malloc(1 * sizeof(bool *));
+//    queryInfo.isPassword[0] = malloc(sizeof(bool));
+
+//        appInfo->rowCount =rowCount ;
+//        appInfo->charCount = charCount ;
+//        appInfo->rowCur =rowCur ;
+//        appInfo->colCur =colCur ;
+//        appInfo->charCur =charCur ;
+
     *queryInfo.isPassword[0] = false;
     buildInfo(&queryInfo  , 75,"Query...",0);
     querySetup( &queryInfo );
@@ -79,8 +90,11 @@ int main()
     resultInfo.fieldXPosition = 1;
     resultInfo.windXPosition = 1;
     resultInfo.numberOfRows = 4;
-    resultInfo.isPassword = malloc(1 * sizeof(bool *));
-    resultInfo.isPassword[0] = malloc(sizeof(bool));
+//    resultInfo.isPassword = malloc(1 * sizeof(bool *));
+//    resultInfo.isPassword[0] = malloc(sizeof(bool));
+
+    prepLocationAndPassword(&resultInfo  ,   1) ;
+
     *resultInfo.isPassword[0] = false;
     buildInfo(&resultInfo  , 75,"Result...",10);
     resultSetup( &resultInfo );
@@ -99,10 +113,15 @@ int main()
     serverConnectInfo.fieldXPosition = 12;
     serverConnectInfo.str = malloc(3 * sizeof(char *));
     serverConnectInfo.labels = malloc(3 * sizeof(char *));
-    serverConnectInfo.isPassword = malloc(3 * sizeof(bool *));
-    serverConnectInfo.isPassword[0] = malloc(sizeof(bool));
-    serverConnectInfo.isPassword[1] = malloc(sizeof(bool));
-    serverConnectInfo.isPassword[2] = malloc(sizeof(bool));
+
+//    serverConnectInfo.isPassword = malloc(3 * sizeof(bool *));
+//    serverConnectInfo.isPassword[0] = malloc(sizeof(bool));
+//    serverConnectInfo.isPassword[1] = malloc(sizeof(bool));
+//    serverConnectInfo.isPassword[2] = malloc(sizeof(bool));
+    prepLocationAndPassword(&serverConnectInfo  ,   3) ;
+
+
+
     *serverConnectInfo.isPassword[0] = false;
     *serverConnectInfo.isPassword[1] = false;
     *serverConnectInfo.isPassword[2] = true;
@@ -135,7 +154,7 @@ int main()
 //                break;
 
             case 1  :
-                { //Server Connection Is selected
+                { //Server Connection Is selected serverConnectInfo->str[0]
                     show_panel((&serverConnectInfo)->panel);
                     cmd = manageServerConnection( &serverConnectInfo  );
                     closePanel( &serverConnectInfo ,&queryInfo ,&resultInfo  );
@@ -195,19 +214,45 @@ int main()
 //	free_field(queryInfo.field[0]);
     freeFields(&queryInfo);
 	delwin(queryInfo.win);
+    free(queryInfo.str);
+//    free(queryInfo.isPassword[0]);
+//    free(queryInfo.isPassword);
+    freeLocationAndPassword(&queryInfo , 1);
 
 	unpost_form(resultInfo.form);
 	free_form(resultInfo.form);
 //	free_field(resultInfo.field[0]);
     freeFields(&resultInfo);
-	delwin(queryInfo.win);
+	delwin(resultInfo.win);
+//    free(resultInfo.isPassword[0]);
+//    free(resultInfo.isPassword);
+
+    freeLocationAndPassword(&resultInfo , 1);
+
+
+	delwin(menuInfo.win);
+
 
 	unpost_form(serverConnectInfo.form);
 	free_form(serverConnectInfo.form);
     freeFields(&serverConnectInfo);
 	delwin(serverConnectInfo.win);
 
-	delwin(menuInfo.win);
+    free(serverConnectInfo.str);
+    free(serverConnectInfo.labels);
+//    free(serverConnectInfo.isPassword[0]);
+//    free(serverConnectInfo.isPassword[1]);
+//    free(serverConnectInfo.isPassword[2]);
+//    free(serverConnectInfo.isPassword);
+    freeLocationAndPassword(&serverConnectInfo , 3);
+
+
+
+
+
+
+
+
 
 	endwin();
     return 0;
@@ -249,6 +294,57 @@ void freeFields(struct AppInfo   *appInfo ){
         free_field(appInfo->field2[i]);
     }
 }
+void freeLocationAndPassword(struct AppInfo   *appInfo , int num){
+
+    for (int i =0; i <  num;i++){
+        free(appInfo->isPassword[i]);
+
+        free(appInfo->rowCount[i]);
+        free(appInfo->charCount[i]);
+        free(appInfo->rowCur[i]);
+        free(appInfo->colCur[i]);
+        free(appInfo->charCur[i]);
+    }
+//    free(serverConnectInfo.isPassword[1]);
+//    free(serverConnectInfo.isPassword[2]);
+    free(appInfo->isPassword);
+
+    free(appInfo->rowCount);
+    free(appInfo->charCount);
+    free(appInfo->rowCur);
+    free(appInfo->colCur);
+    free(appInfo->charCur);
+
+
+}
+void prepLocationAndPassword(struct AppInfo   *appInfo , int num) {
+
+    appInfo->isPassword = malloc(num * sizeof(bool *));
+    appInfo->rowCount =malloc(num * sizeof(int *)) ;
+    appInfo->charCount = malloc(num * sizeof(int *))  ;
+    appInfo->rowCur =malloc(num * sizeof(int *))  ;
+    appInfo->colCur =malloc(num * sizeof(int *))  ;
+    appInfo->charCur =malloc(num * sizeof(int *))  ;
+
+
+
+    for (int i =0; i <  num;i++){
+        appInfo->isPassword[i] = malloc(sizeof(bool));
+
+        appInfo->rowCount[i] =malloc(sizeof(int)) ;
+        appInfo->charCount[i] = malloc(sizeof(int)) ;
+        appInfo->rowCur[i] =malloc(sizeof(int)) ;
+        appInfo->colCur[i] =malloc(sizeof(int)) ;
+        appInfo->charCur[i] =malloc(sizeof(int)) ;
+
+        *appInfo->rowCount[i] =0 ;
+        *appInfo->charCount[i] = 0 ;
+        *appInfo->rowCur[i] =0 ;
+        *appInfo->colCur[i] =0 ;
+        *appInfo->charCur[i] =0 ;
+
+    }
+}
 
 void destroy_win(WINDOW *local_win)
 {
@@ -279,11 +375,6 @@ void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlu
 	appInfo->fieldSize = fieldSize ;//75;
 
 
-    appInfo->rowCount = 1;
-    appInfo->charCount = 0;
-    appInfo->rowCur = 1;
-    appInfo->colCur = 1;
-    appInfo->charCur = 1;
     appInfo->field2 = malloc((appInfo->numberOfFields + 1) * sizeof(FIELD *));
 
 
@@ -308,6 +399,14 @@ void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlu
             appInfo->field2[i] = new_field(  appInfo->numberOfRows , appInfo->fieldSize - 47 ,     ( i / 3) * 2  , 63, 0, 0);
         }
         else{
+
+
+            *appInfo->rowCount[i/3] = 1;
+            *appInfo->charCount[i/3] = 0;
+            *appInfo->rowCur[i/3] = 1;
+            *appInfo->colCur[i/3] = 1;
+            *appInfo->charCur[i/3] = 1;
+
             appInfo->field2[i] = new_field(  appInfo->numberOfRows , appInfo->fieldSize,    ( i  / 3 ) * 2 , appInfo->fieldXPosition, 0, 0);
             set_field_fore(appInfo->field2[i], COLOR_PAIR(5));/* Put the field with blue background */
             set_field_back(appInfo->field2[i], COLOR_PAIR(5));/* and white foreground (characters */
@@ -315,12 +414,12 @@ void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlu
 
 
 
-            if(*appInfo->isPassword[i/3]){
-              //  field_opts_off(appInfo->field2[i], O_PUBLIC);
-            }
-            else{
-                field_opts_on(appInfo->field2[i], O_PUBLIC);
-            }
+//            if(*appInfo->isPassword[i/3]){
+//              //  field_opts_off(appInfo->field2[i], O_PUBLIC);
+//            }
+//            else{
+//                field_opts_on(appInfo->field2[i], O_PUBLIC);
+//            }
         }
 
 

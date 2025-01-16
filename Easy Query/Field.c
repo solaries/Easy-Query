@@ -27,7 +27,7 @@
 //
 //	return str;
 //}
-
+void setLocations( struct AppInfo   *appInfo , int rowCount , int  charCount , int  rowCur , int  colCur  , int  charCur  ,int curField );
 
 void setupQueryField( struct AppInfo   *appInfo){
     int colSize = appInfo->fieldSize ;
@@ -49,12 +49,12 @@ int manageQueryField( struct AppInfo   *appInfo){
     int ch;
 
     int colSize = appInfo->fieldSize ;
-    int rowCount =appInfo->rowCount ;
-    int charCount = appInfo->charCount ;
-    int rowCur =appInfo->rowCur ;
-    int colCur =appInfo->colCur ;
-    int charCur =appInfo->charCur ;
     int curField = 0;
+    int rowCount =*appInfo->rowCount[curField] ;
+    int charCount = *appInfo->charCount[curField]  ;
+    int rowCur =*appInfo->rowCur[curField]  ;
+    int colCur =*appInfo->colCur[curField]  ;
+    int charCur =*appInfo->charCur[curField]  ;
 
     mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
 //    mvprintw(22, 0, "Ctrl + Q or ESC: Query,  Ctrl + E : Execute,   Ctrl + R: Result" );
@@ -116,6 +116,18 @@ int manageQueryField( struct AppInfo   *appInfo){
                             curField +=  3;
                           }
                           set_current_field(appInfo->form, appInfo->field2[  curField ]);
+
+
+                            rowCount =*appInfo->rowCount[curField/3] ;
+                            charCount = *appInfo->charCount[curField/3]  ;
+                            rowCur =*appInfo->rowCur[curField/3]  ;
+                            colCur =*appInfo->colCur[curField/3]  ;
+                            charCur =*appInfo->charCur[curField/3]  ;
+                            mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
+                            for (int i = 1; i < colCur     ;i++){
+                                form_driver(appInfo->form, REQ_NEXT_CHAR);
+                            }
+
                     }
                     else{
 
@@ -134,8 +146,8 @@ int manageQueryField( struct AppInfo   *appInfo){
                                 colCur = ((charCur   ) % colSize)  ;
                             }
     //                        mvprintw(19, 0, "                                                                                                                          "  );
-                            mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
                             form_driver(appInfo->form, REQ_NEXT_LINE );
+                            mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
                             for (int i = 1; i < colCur     ;i++){
                                 form_driver(appInfo->form, REQ_NEXT_CHAR);
                             }
@@ -156,6 +168,16 @@ int manageQueryField( struct AppInfo   *appInfo){
                             curField -=  3;
                           }
                           set_current_field(appInfo->form, appInfo->field2[  curField ]);
+
+                            rowCount =*appInfo->rowCount[curField/3] ;
+                            charCount = *appInfo->charCount[curField/3]  ;
+                            rowCur =*appInfo->rowCur[curField/3]  ;
+                            colCur =*appInfo->colCur[curField/3]  ;
+                            charCur =*appInfo->charCur[curField/3]  ;
+                        mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
+                        for (int i = 1; i < colCur     ;i++){
+                            form_driver(appInfo->form, REQ_NEXT_CHAR);
+                        }
                     }
                     else{
 
@@ -168,14 +190,29 @@ int manageQueryField( struct AppInfo   *appInfo){
                             else{
                                 colCur = ((charCur   ) % colSize)  ;
                             }
-                            mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
                             form_driver(appInfo->form, REQ_PREV_LINE );
+                            mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
                             for (int i = 1; i < colCur     ;i++){
                                 form_driver(appInfo->form, REQ_NEXT_CHAR);
                             }
                         }
 
                     }
+
+
+
+//                    if(rowCur > 1){
+//                        charCur -=colSize;
+//                        rowCur -=1;
+//                        if((charCur    )% colSize ==0){
+//                            colCur = colSize;
+//                        }
+//                        else{
+//                            colCur = ((charCur   ) % colSize)  ;
+//                        }
+//                        form_driver(appInfo->form, REQ_PREV_LINE );
+
+//                    }
                     mvprintw(23, 75, "%d", ch);
                     refresh();
                 }
@@ -391,13 +428,25 @@ int manageQueryField( struct AppInfo   *appInfo){
                 }
                 break;
         }
-        appInfo->rowCount =rowCount ;// 1;
-        appInfo->charCount = charCount ;//0;
-        appInfo->rowCur =rowCur ;// 1;
-        appInfo->colCur =colCur ;// 1;
-        appInfo->charCur =charCur ;// 1;
+
+//        appInfo->rowCount =rowCount ;// 1;
+//        appInfo->charCount = charCount ;//0;
+//        appInfo->rowCur =rowCur ;// 1;
+//        appInfo->colCur =colCur ;// 1;
+//        appInfo->charCur =charCur ;// 1;
+        setLocations(  appInfo ,  rowCount , charCount , rowCur , colCur  , charCur  , curField  );
+        appInfo->str[( curField / 3)] = field_buffer(appInfo->field2[curField], 0);
+
        form_driver(appInfo->form, '\0');
     }
     return 0;
+}
+
+void setLocations( struct AppInfo   *appInfo , int rowCount , int  charCount , int  rowCur , int  colCur  , int  charCur   , int  curField   ){
+        *appInfo->rowCount[curField/3]  =rowCount ;
+        *appInfo->charCount[curField/3]  = charCount ;
+        *appInfo->rowCur[curField/3]  =rowCur ;
+        *appInfo->colCur[curField/3]  =colCur ;
+        *appInfo->charCur[curField/3]  =charCur ;
 }
 

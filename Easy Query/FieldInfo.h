@@ -23,11 +23,19 @@ struct AppInfo {
 
 
 
-    int rowCount ;
-    int charCount  ;
-    int rowCur  ;
-    int colCur  ;
-    int charCur ;
+    int **rowCount ;
+    int **charCount  ;
+    int **rowCur  ;
+    int **colCur  ;
+    int **charCur ;
+
+
+//        appInfo->rowCount =rowCount ;
+//        appInfo->charCount = charCount ;
+//        appInfo->rowCur =rowCur ;
+//        appInfo->colCur =colCur ;
+//        appInfo->charCur =charCur ;
+
 	char **labels;
 	FIELD **multiField ;
 	char *strMsg  ;
