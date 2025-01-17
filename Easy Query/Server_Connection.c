@@ -31,7 +31,7 @@ void serverConnectionSetup(struct AppInfo   *appInfo){
 //            set_field_fore(appInfo->field2[i], COLOR_PAIR(5));/* Put the field with blue background */
 //            set_field_back(appInfo->field2[i], COLOR_PAIR(5));/* and white foreground (characters */
             field_opts_off(appInfo->field2[i], O_AUTOSKIP);
-            set_field_opts(appInfo->field2[i], O_VISIBLE  | O_EDIT | O_ACTIVE  );
+            set_field_opts(appInfo->field2[i], O_VISIBLE  | O_EDIT | O_ACTIVE | O_STATIC );
 
 
             if(*appInfo->isPassword[i/3]){

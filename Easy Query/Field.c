@@ -30,18 +30,18 @@
 void setLocations( struct AppInfo   *appInfo , int rowCount , int  charCount , int  rowCur , int  colCur  , int  charCur  ,int curField );
 
 void setupQueryField( struct AppInfo   *appInfo){
-    int colSize = appInfo->fieldSize ;
-    int rowCount = 1;
-    int charCount = 0;
-    int rowCur = 1;
-    int colCur = 1;
+//    int colSize = appInfo->fieldSize ;
+//    int rowCount = 1;
+//    int charCount = 0;
+//    int rowCur = 1;
+//    int colCur = 1;
 
-    mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
+//    mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
 //    mvprintw(22, 0, "Ctrl + Q or ESC: Query,  Ctrl + E : Execute,   Ctrl + R: Result" );
 //    mvprintw(23, 0, "Ctrl + W: Menu,  Alt + X: Exit, Space: toggle Select" );
-    refresh();
-    set_current_field(appInfo->form, appInfo->field2[0]); /* Set focus to the colored field */
-    form_driver(appInfo->form, '\0');
+//    refresh();
+//    set_current_field(appInfo->form, appInfo->field2[0]); /* Set focus to the colored field */
+//    form_driver(appInfo->form, '\0');
 }
 
 
@@ -479,7 +479,7 @@ int manageQueryField( struct AppInfo   *appInfo){
                         for (int i = 1; i < colCur;i++){
                             form_driver(appInfo->form, REQ_NEXT_CHAR);
                         }
-                        mvprintw(22, 55, ".%s.", theText);
+//                        mvprintw(22, 55, ".%s.", theText);
                     }
                     mvprintw(23, 75, "%d", ch);
                     mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
@@ -489,7 +489,11 @@ int manageQueryField( struct AppInfo   *appInfo){
             default:
 
                 {
-                    if((ch >=32 && ch <=126)){
+//                    if(!(appInfo->numberOfRows == 1   &&  charCount < colSize -1)){
+//                         mvprintw(21, 0, "UUUUUUUUUUUUU" );
+//                    }
+
+                    if((ch >=32 && ch <=126 && ((appInfo->numberOfRows > 1) || (appInfo->numberOfRows == 1   &&  charCount < colSize -1)) )){
                         bool doMovenext = false;
                         if(charCur < charCount){
                             doMovenext = true;

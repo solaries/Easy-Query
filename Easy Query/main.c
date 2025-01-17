@@ -113,6 +113,9 @@ int main()
     serverConnectInfo.fieldXPosition = 12;
     serverConnectInfo.str = malloc(3 * sizeof(char *));
     serverConnectInfo.labels = malloc(3 * sizeof(char *));
+//    refresh();
+//    set_current_field(appInfo->form, appInfo->field2[0]); /* Set focus to the colored field */
+//    form_driver(appInfo->form, '\0');
 
 //    serverConnectInfo.isPassword = malloc(3 * sizeof(bool *));
 //    serverConnectInfo.isPassword[0] = malloc(sizeof(bool));
@@ -130,7 +133,7 @@ int main()
     serverConnectInfo.labels[0] = "Server: ";
     serverConnectInfo.labels[1] = "User:";
     serverConnectInfo.labels[2] = "Password: " ;
-    buildInfo(&serverConnectInfo  , 50,"Server Connection...",3);
+    buildInfo(&serverConnectInfo  , 51,"Server Connection...",3);
     serverConnectionSetup( &serverConnectInfo );
 
 
@@ -370,14 +373,8 @@ void destroy_win(WINDOW *local_win)
 
 
 void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlus){
-
-
 	appInfo->fieldSize = fieldSize ;//75;
-
-
     appInfo->field2 = malloc((appInfo->numberOfFields + 1) * sizeof(FIELD *));
-
-
 //mvprintw(14, 10, "Value 1:");
 
 
@@ -408,6 +405,10 @@ void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlu
             *appInfo->charCur[i/3] = 1;
 
             appInfo->field2[i] = new_field(  appInfo->numberOfRows , appInfo->fieldSize,    ( i  / 3 ) * 2 , appInfo->fieldXPosition, 0, 0);
+
+
+
+
             set_field_fore(appInfo->field2[i], COLOR_PAIR(5));/* Put the field with blue background */
             set_field_back(appInfo->field2[i], COLOR_PAIR(5));/* and white foreground (characters */
 
