@@ -27,7 +27,7 @@ int manageQuery(struct AppInfo   *appInfo){
 //    mvprintw(22, 0, "Ctrl + Q or ESC: Query,  Ctrl + E : Execute,   Ctrl + R: Result" );
     mvprintw(22, 0, "Ctrl + E : Execute,   Ctrl + R: Result                            " );
 //    mvprintw(23, 0, "Ctrl + W: Menu,  Alt + X: Exit, Space: toggle Select" );
-    mvprintw(23, 0, "Ctrl + W: Menu,  Alt + X: Exit                                    " );
+    mvprintw(23, 0, "Ctrl + W: Menu,  Ctrl + X: Exit                                    " );
 
 
 
@@ -72,6 +72,11 @@ int manageQuery(struct AppInfo   *appInfo){
                     return ch;
                 }
                 break;
+//            case 248  :
+//                { //alt + x
+//                    return ch;
+//                }
+//                break;
             default:
                 {
 

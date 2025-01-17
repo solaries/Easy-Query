@@ -98,7 +98,7 @@
 1735242367 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Delete.c
 	"Delete.h"
 
-1737060774 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Field.c
+1737116917 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Field.c
 	"Field.h"
 	"FieldInfo.h"
 	<form.h>
@@ -140,7 +140,7 @@
 1735242038 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Select.c
 	"Select.h"
 
-1737045303 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Server_Connection.c
+1737116657 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Server_Connection.c
 	"Server_Connection.h"
 	"Field.h"
 	<form.h>

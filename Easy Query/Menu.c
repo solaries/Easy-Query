@@ -39,7 +39,7 @@ int manageMenu(struct AppInfo   *appInfo ){
 //    mvprintw(22, 0, "Ctrl + Q or ESC: Query,  Ctrl + E : Execute,   Ctrl + R: Result" );
     mvprintw(22, 0, "Ctrl + Q or ESC: Query , Enter : Select menu item                        " );
 //    mvprintw(23, 0, "Ctrl + W: Menu,  Alt + X: Exit, Space: toggle Select" );
-    mvprintw(23, 0, "UP: UP, Down: Down , Alt + X: Exit                                                              " );
+    mvprintw(23, 0, "UP: UP, Down: Down , Ctrl + X: Exit                                                              " );
 
     refresh();
 

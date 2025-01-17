@@ -58,7 +58,7 @@ int manageServerConnection(struct AppInfo   *appInfo){
 //    mvprintw(22, 0, "Ctrl + Q or ESC: Query,  Ctrl + E : Execute,   Ctrl + R: Result" );
     mvprintw(22, 0, "ESC : Close Dailog and return to query                            " );
 //    mvprintw(23, 0, "Ctrl + W: Menu,  Alt + X: Exit, Space: toggle Select" );
-    mvprintw(23, 0, "UP: UP, Down: Down                                                " );
+    mvprintw(23, 0, "UP or Shift + Tab: UP, Down or Tab: Down                                                " );
 
 
 	box(appInfo->win, 0, 0);
