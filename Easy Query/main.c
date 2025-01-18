@@ -42,6 +42,9 @@ void prepLocationAndPassword(struct AppInfo   *appInfo , int num);
 void freeLocationAndPassword(struct AppInfo   *appInfo , int num);
 void closePanel(struct AppInfo   *appInfo ,struct AppInfo   *queryInfo ,struct AppInfo   *resultInfo  );
 
+void free_bool_memory(bool ** ptr);
+void free_int_memory(int ** ptr);
+//void free_str_memory(char ** ptr);
 
 int main()
 {
@@ -113,23 +116,10 @@ int main()
     serverConnectInfo.fieldXPosition = 12;
     serverConnectInfo.str = malloc(3 * sizeof(char *));
     serverConnectInfo.labels = malloc(3 * sizeof(char *));
-//    refresh();
-//    set_current_field(appInfo->form, appInfo->field2[0]); /* Set focus to the colored field */
-//    form_driver(appInfo->form, '\0');
-
-//    serverConnectInfo.isPassword = malloc(3 * sizeof(bool *));
-//    serverConnectInfo.isPassword[0] = malloc(sizeof(bool));
-//    serverConnectInfo.isPassword[1] = malloc(sizeof(bool));
-//    serverConnectInfo.isPassword[2] = malloc(sizeof(bool));
     prepLocationAndPassword(&serverConnectInfo  ,   3) ;
-
-
-
     *serverConnectInfo.isPassword[0] = false;
     *serverConnectInfo.isPassword[1] = false;
     *serverConnectInfo.isPassword[2] = true;
-//    serverConnectInfo.isPassword[2] = serverConnectInfo.isPassword[1];
-
     serverConnectInfo.labels[0] = "Server: ";
     serverConnectInfo.labels[1] = "User:";
     serverConnectInfo.labels[2] = "Password: " ;
@@ -137,10 +127,56 @@ int main()
     serverConnectionSetup( &serverConnectInfo );
 
 
+
+
+    struct AppInfo createDatabaseInfo;
+    createDatabaseInfo.numberOfFields = 12;
+    createDatabaseInfo.numberOfRows = 1;
+    createDatabaseInfo.windXPosition = 3;
+    createDatabaseInfo.fieldXPosition = 12;
+    createDatabaseInfo.str  = serverConnectInfo.str;
+    createDatabaseInfo.labels = malloc(4 * sizeof(char *));
+    prepLocationAndPassword(&createDatabaseInfo  ,   4) ;
+
+
+    for (int i =0; i <  3;i++){
+        free(createDatabaseInfo.rowCount[i]);
+        free(createDatabaseInfo.charCount[i]);
+        free(createDatabaseInfo.rowCur[i]);
+        free(createDatabaseInfo.colCur[i]);
+        free(createDatabaseInfo.charCur[i]);
+
+        createDatabaseInfo.rowCount[i] = serverConnectInfo.rowCount[i];
+        createDatabaseInfo.charCount[i] = serverConnectInfo.charCount[i];
+        createDatabaseInfo.rowCur[i] =serverConnectInfo.rowCur[i];
+        createDatabaseInfo.colCur[i] =serverConnectInfo.colCur[i];
+        createDatabaseInfo.charCur[i] =serverConnectInfo.charCur[i];
+    }
+//    free(appInfo->rowCount);
+//    free(appInfo->charCount);
+//    free(appInfo->rowCur);
+//    free(appInfo->colCur);
+//    free(appInfo->charCur);
+
+
+    *createDatabaseInfo.isPassword[0] = false;
+    *createDatabaseInfo.isPassword[1] = false;
+    *createDatabaseInfo.isPassword[2] = true;
+    *createDatabaseInfo.isPassword[3] = false;
+    createDatabaseInfo.labels[0] = "Server: ";
+    createDatabaseInfo.labels[1] = "User:";
+    createDatabaseInfo.labels[2] = "Password: " ;
+    createDatabaseInfo.labels[3] = "Database: " ;
+    buildInfo(&createDatabaseInfo  , 51,"Create Database...",4);
+    createDatabaseSetup( &createDatabaseInfo );
+
+
+
 //getch();
 
     hide_panel((&menuInfo)->panel);
     hide_panel((&serverConnectInfo)->panel);
+    hide_panel((&createDatabaseInfo)->panel);
     update_panels();
     doupdate();
 
@@ -158,9 +194,19 @@ int main()
 
             case 1  :
                 { //Server Connection Is selected serverConnectInfo->str[0]
+//                    show_panel((&createDatabaseInfo)->panel);
+//                    cmd = manageCreateDatabase( &createDatabaseInfo  );
+//                    closePanel( &createDatabaseInfo ,&queryInfo ,&resultInfo  );
                     show_panel((&serverConnectInfo)->panel);
                     cmd = manageServerConnection( &serverConnectInfo  );
                     closePanel( &serverConnectInfo ,&queryInfo ,&resultInfo  );
+                }
+                break;
+            case 2  :
+                { //Server Connection Is selected serverConnectInfo->str[0]
+                    show_panel((&createDatabaseInfo)->panel);
+                    cmd = manageCreateDatabase( &createDatabaseInfo , &serverConnectInfo);
+                    closePanel( &createDatabaseInfo ,&queryInfo ,&resultInfo  );
                 }
                 break;
             case 27  :
@@ -178,7 +224,6 @@ int main()
 
             case 23  :
                 { //ctrl + W - for menu
-
                     show_panel((&menuInfo)->panel);
                     cmd = manageMenu( &menuInfo  );
                     closePanel( &menuInfo ,&queryInfo ,&resultInfo  );
@@ -215,54 +260,74 @@ int main()
 	unpost_form(queryInfo.form);
 	free_form(queryInfo.form);
 //	free_field(queryInfo.field[0]);
-    freeFields(&queryInfo);
 	delwin(queryInfo.win);
     free(queryInfo.str);
 //    free(queryInfo.isPassword[0]);
 //    free(queryInfo.isPassword);
     freeLocationAndPassword(&queryInfo , 1);
+    freeFields(&queryInfo);
 
 	unpost_form(resultInfo.form);
 	free_form(resultInfo.form);
 //	free_field(resultInfo.field[0]);
-    freeFields(&resultInfo);
 	delwin(resultInfo.win);
 //    free(resultInfo.isPassword[0]);
 //    free(resultInfo.isPassword);
-
     freeLocationAndPassword(&resultInfo , 1);
-
+    freeFields(&resultInfo);
 
 	delwin(menuInfo.win);
 
-
 	unpost_form(serverConnectInfo.form);
 	free_form(serverConnectInfo.form);
+
+//    free(serverConnectInfo.str[0]);
+//    free(serverConnectInfo.str[1]);
+//    free(serverConnectInfo.str[2]);
+    free(serverConnectInfo.str);
+    free(serverConnectInfo.labels);
+    freeLocationAndPassword(&serverConnectInfo , 3);
     freeFields(&serverConnectInfo);
 	delwin(serverConnectInfo.win);
 
-    free(serverConnectInfo.str);
-    free(serverConnectInfo.labels);
-//    free(serverConnectInfo.isPassword[0]);
-//    free(serverConnectInfo.isPassword[1]);
-//    free(serverConnectInfo.isPassword[2]);
-//    free(serverConnectInfo.isPassword);
-    freeLocationAndPassword(&serverConnectInfo , 3);
+	unpost_form(createDatabaseInfo.form);
+	free_form(createDatabaseInfo.form);
 
-
-
-
-
-
-
-
+    free(createDatabaseInfo.str);
+    free(createDatabaseInfo.labels);
+    freeLocationAndPassword(&createDatabaseInfo , 3);
+	delwin(createDatabaseInfo.win);
+    freeFields(&createDatabaseInfo);
 
 	endwin();
     return 0;
 }
 
-void closePanel(struct AppInfo   *appInfo ,struct AppInfo   *queryInfo ,struct AppInfo   *resultInfo  ){
+//void free_bool_memory(bool ** ptr) {
+//
+//    if(*ptr != NULL){
+//        free(*ptr);
+//        *ptr = NULL;
+//    }
+//}
+//
+//void free_int_memory(int ** ptr) {
+//
+//    if(*ptr != NULL){
+//        free(*ptr);
+//        *ptr = NULL;
+//    }
+//}
 
+//void free_str_memory(char ** ptr) {
+//
+//    if(ptr != NULL){
+//        free(ptr);
+//        ptr = NULL;
+//    }
+//}
+
+void closePanel(struct AppInfo   *appInfo ,struct AppInfo   *queryInfo ,struct AppInfo   *resultInfo  ){
     destroy_win(appInfo->win);
 //getch();
     hide_panel(appInfo->panel);
@@ -270,14 +335,12 @@ void closePanel(struct AppInfo   *appInfo ,struct AppInfo   *queryInfo ,struct A
     doupdate();
 //getch();
     refresh();
-
 //getch();
     box(queryInfo->win, 0, 0);
     wrefresh(queryInfo->win);
 //getch();
     box(resultInfo->win, 0, 0);
     wrefresh(resultInfo->win);
-
 //getch();
 //    hide_panel((&menuInfo)->panel);
 //    update_panels();
@@ -290,7 +353,6 @@ void closePanel(struct AppInfo   *appInfo ,struct AppInfo   *queryInfo ,struct A
 //    wrefresh((&queryInfo)->win);
 //    box((&resultInfo)->win, 0, 0);
 //    wrefresh((&resultInfo)->win);
-
 }
 void freeFields(struct AppInfo   *appInfo ){
     for (int i =0; i < appInfo->numberOfFields;i++){
@@ -298,7 +360,6 @@ void freeFields(struct AppInfo   *appInfo ){
     }
 }
 void freeLocationAndPassword(struct AppInfo   *appInfo , int num){
-
     for (int i =0; i <  num;i++){
         free(appInfo->isPassword[i]);
 
@@ -307,45 +368,44 @@ void freeLocationAndPassword(struct AppInfo   *appInfo , int num){
         free(appInfo->rowCur[i]);
         free(appInfo->colCur[i]);
         free(appInfo->charCur[i]);
+
+//        free_bool_memory(&appInfo->isPassword[i]);
+//        free_int_memory(&appInfo->rowCount[i]);
+//        free_int_memory(&appInfo->charCount[i]);
+//        free_int_memory(&appInfo->rowCur[i]);
+//        free_int_memory(&appInfo->colCur[i]);
+//        free_int_memory(&appInfo->charCur[i]);
+
+//        free_str_memory(&appInfo->str[i]);
     }
 //    free(serverConnectInfo.isPassword[1]);
 //    free(serverConnectInfo.isPassword[2]);
     free(appInfo->isPassword);
-
     free(appInfo->rowCount);
     free(appInfo->charCount);
     free(appInfo->rowCur);
     free(appInfo->colCur);
     free(appInfo->charCur);
-
-
 }
 void prepLocationAndPassword(struct AppInfo   *appInfo , int num) {
-
     appInfo->isPassword = malloc(num * sizeof(bool *));
     appInfo->rowCount =malloc(num * sizeof(int *)) ;
     appInfo->charCount = malloc(num * sizeof(int *))  ;
     appInfo->rowCur =malloc(num * sizeof(int *))  ;
     appInfo->colCur =malloc(num * sizeof(int *))  ;
     appInfo->charCur =malloc(num * sizeof(int *))  ;
-
-
-
     for (int i =0; i <  num;i++){
         appInfo->isPassword[i] = malloc(sizeof(bool));
-
         appInfo->rowCount[i] =malloc(sizeof(int)) ;
         appInfo->charCount[i] = malloc(sizeof(int)) ;
         appInfo->rowCur[i] =malloc(sizeof(int)) ;
         appInfo->colCur[i] =malloc(sizeof(int)) ;
         appInfo->charCur[i] =malloc(sizeof(int)) ;
-
         *appInfo->rowCount[i] =0 ;
         *appInfo->charCount[i] = 0 ;
         *appInfo->rowCur[i] =0 ;
         *appInfo->colCur[i] =0 ;
         *appInfo->charCur[i] =0 ;
-
     }
 }
 
@@ -376,45 +436,28 @@ void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlu
 	appInfo->fieldSize = fieldSize ;//75;
     appInfo->field2 = malloc((appInfo->numberOfFields + 1) * sizeof(FIELD *));
 //mvprintw(14, 10, "Value 1:");
-
-
-
-
-
 	refresh();
     for (int i =0; i < appInfo->numberOfFields;i++){
         if(i % 3 == 1 ){
             appInfo->field2[i] = new_field(  appInfo->numberOfRows , appInfo->fieldSize - 41 ,   (i / 3) * 2 , 2, 0, 0);
             field_opts_off(appInfo->field2[i], O_ACTIVE);
             set_field_buffer(appInfo->field2[i], 0, appInfo->labels[( i / 3) ]);
-
-
-            appInfo->str[( i / 3)] = "";
-
+            if(appInfo->str!=NULL){
+                appInfo->str[( i / 3)] = "";
+            }
         }
         else if(i % 3 ==2 ){
             appInfo->field2[i] = new_field(  appInfo->numberOfRows , appInfo->fieldSize - 47 ,     ( i / 3) * 2  , 63, 0, 0);
         }
         else{
-
-
             *appInfo->rowCount[i/3] = 1;
             *appInfo->charCount[i/3] = 0;
             *appInfo->rowCur[i/3] = 1;
             *appInfo->colCur[i/3] = 1;
             *appInfo->charCur[i/3] = 1;
-
             appInfo->field2[i] = new_field(  appInfo->numberOfRows , appInfo->fieldSize,    ( i  / 3 ) * 2 , appInfo->fieldXPosition, 0, 0);
-
-
-
-
             set_field_fore(appInfo->field2[i], COLOR_PAIR(5));/* Put the field with blue background */
             set_field_back(appInfo->field2[i], COLOR_PAIR(5));/* and white foreground (characters */
-
-
-
-
 //            if(*appInfo->isPassword[i/3]){
 //              //  field_opts_off(appInfo->field2[i], O_PUBLIC);
 //            }
@@ -422,24 +465,14 @@ void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlu
 //                field_opts_on(appInfo->field2[i], O_PUBLIC);
 //            }
         }
-
-
     }
     appInfo->field2[appInfo->numberOfFields] = NULL;
-
 //    appInfo->field[0] = new_field(4, appInfo->fieldSize, 1, 1, 0, 0);
 //    appInfo->field[1] = NULL;
-
-
-
-
-
 	appInfo->form = new_form(appInfo->field2);
 //	set_field_fore(appInfo->field[0], COLOR_PAIR(5));/* Put the field with blue background */
 //	set_field_back(appInfo->field[0], COLOR_PAIR(6));/* and white foreground (characters */
-
     int  rows, cols;
-
 	scale_form(appInfo->form, &rows, &cols);
 //    appInfo->win = newwin(rows + 5, cols + 2, 1 + yPlus, 1);
     appInfo->win = newwin(rows + 5, cols + 2, 1 + yPlus, appInfo->windXPosition);
@@ -447,28 +480,19 @@ void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlu
     set_form_win(appInfo->form, appInfo->win);
     set_form_sub(appInfo->form, derwin(appInfo->win, rows, cols, 3, 1));
     box(appInfo->win, 0, 0);
-
     print_in_middle(appInfo->win, 1, 0, cols + 4, label, COLOR_PAIR(1));
     appInfo->panel = new_panel(appInfo->win);
-
-
-
-
 	wattron(appInfo->win, COLOR_PAIR(1));
 //	mvwprintw(appInfo->win, 2, 3, "%s", "Value 1:");
 	wattroff(appInfo->win, COLOR_PAIR(1));
 	refresh();
-
  }
 
 
 void win_show(WINDOW *win, char *label, int label_color)
 {
-
     int /*startx, starty,*/  height, width;
-
 	getmaxyx(win, height, width);
-
 	box(win, 0, 0);
 	mvwaddch(win, 2, 0, ACS_LTEE);
 	mvwhline(win, 2, 1, ACS_HLINE, width - 2);
@@ -481,20 +505,21 @@ void win_show(WINDOW *win, char *label, int label_color)
 
 void print_in_middle(WINDOW *win, int starty, int startx, int width, char *string, chtype color)
 {
-
     int length, x, y;
 	float temp;
-
-	if(win == NULL)
+	if(win == NULL){
 		win = stdscr;
+	}
 	getyx(win, y, x);
-	if(startx != 0)
+	if(startx != 0){
 		x = startx;
-	if(starty != 0)
+    }
+	if(starty != 0){
 		y = starty;
-	if(width == 0)
+	}
+	if(width == 0){
 		width = 80;
-
+	}
 	length = strlen(string);
 	temp = (width - length)/ 2;
 	x = startx + (int)temp;
