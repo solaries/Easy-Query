@@ -20,6 +20,7 @@ struct AppInfo {
 	int fieldSize;
 	char **str  ;
 	bool **isPassword  ;
+	bool  isCreateDB  ;
 
 
 

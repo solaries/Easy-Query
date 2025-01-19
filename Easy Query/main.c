@@ -85,6 +85,7 @@ int main()
 //        appInfo->charCur =charCur ;
 
     *queryInfo.isPassword[0] = false;
+    queryInfo.isCreateDB = false;
     buildInfo(&queryInfo  , 75,"Query...",0);
     querySetup( &queryInfo );
 
@@ -99,6 +100,7 @@ int main()
     prepLocationAndPassword(&resultInfo  ,   1) ;
 
     *resultInfo.isPassword[0] = false;
+    resultInfo.isCreateDB = false;
     buildInfo(&resultInfo  , 75,"Result...",10);
     resultSetup( &resultInfo );
 
@@ -120,6 +122,7 @@ int main()
     *serverConnectInfo.isPassword[0] = false;
     *serverConnectInfo.isPassword[1] = false;
     *serverConnectInfo.isPassword[2] = true;
+    serverConnectInfo.isCreateDB = false;
     serverConnectInfo.labels[0] = "Server: ";
     serverConnectInfo.labels[1] = "User:";
     serverConnectInfo.labels[2] = "Password: " ;
@@ -130,28 +133,28 @@ int main()
 
 
     struct AppInfo createDatabaseInfo;
-    createDatabaseInfo.numberOfFields = 12;
+    createDatabaseInfo.numberOfFields = 9;
     createDatabaseInfo.numberOfRows = 1;
     createDatabaseInfo.windXPosition = 3;
     createDatabaseInfo.fieldXPosition = 12;
     createDatabaseInfo.str  = serverConnectInfo.str;
-    createDatabaseInfo.labels = malloc(4 * sizeof(char *));
+    createDatabaseInfo.labels = malloc(3 * sizeof(char *));
     prepLocationAndPassword(&createDatabaseInfo  ,   4) ;
 
 
-    for (int i =0; i <  3;i++){
-        free(createDatabaseInfo.rowCount[i]);
-        free(createDatabaseInfo.charCount[i]);
-        free(createDatabaseInfo.rowCur[i]);
-        free(createDatabaseInfo.colCur[i]);
-        free(createDatabaseInfo.charCur[i]);
-
-        createDatabaseInfo.rowCount[i] = serverConnectInfo.rowCount[i];
-        createDatabaseInfo.charCount[i] = serverConnectInfo.charCount[i];
-        createDatabaseInfo.rowCur[i] =serverConnectInfo.rowCur[i];
-        createDatabaseInfo.colCur[i] =serverConnectInfo.colCur[i];
-        createDatabaseInfo.charCur[i] =serverConnectInfo.charCur[i];
-    }
+//    for (int i =1; i <  4;i++){
+//        free(createDatabaseInfo.rowCount[i]);
+//        free(createDatabaseInfo.charCount[i]);
+//        free(createDatabaseInfo.rowCur[i]);
+//        free(createDatabaseInfo.colCur[i]);
+//        free(createDatabaseInfo.charCur[i]);
+//
+//        createDatabaseInfo.rowCount[i] = serverConnectInfo.rowCount[i-1];
+//        createDatabaseInfo.charCount[i] = serverConnectInfo.charCount[i-1];
+//        createDatabaseInfo.rowCur[i] =serverConnectInfo.rowCur[i-1];
+//        createDatabaseInfo.colCur[i] =serverConnectInfo.colCur[i-1];
+//        createDatabaseInfo.charCur[i] =serverConnectInfo.charCur[i-1];
+//    }
 //    free(appInfo->rowCount);
 //    free(appInfo->charCount);
 //    free(appInfo->rowCur);
@@ -161,13 +164,17 @@ int main()
 
     *createDatabaseInfo.isPassword[0] = false;
     *createDatabaseInfo.isPassword[1] = false;
-    *createDatabaseInfo.isPassword[2] = true;
-    *createDatabaseInfo.isPassword[3] = false;
-    createDatabaseInfo.labels[0] = "Server: ";
-    createDatabaseInfo.labels[1] = "User:";
-    createDatabaseInfo.labels[2] = "Password: " ;
-    createDatabaseInfo.labels[3] = "Database: " ;
-    buildInfo(&createDatabaseInfo  , 51,"Create Database...",4);
+    *createDatabaseInfo.isPassword[2] = false;
+    *createDatabaseInfo.isPassword[3] = true;
+    createDatabaseInfo.isCreateDB = false;
+    createDatabaseInfo.labels[0] = "Database: " ;
+    createDatabaseInfo.labels[1] = "Server: ";
+    createDatabaseInfo.labels[2] = "User:";
+//    createDatabaseInfo.labels[3] = "Password: " ;
+
+    createDatabaseInfo.isCreateDB=true;
+
+    buildInfo(&createDatabaseInfo  , 51,"Create Database...",3);
     createDatabaseSetup( &createDatabaseInfo );
 
 
@@ -204,6 +211,25 @@ int main()
                 break;
             case 2  :
                 { //Server Connection Is selected serverConnectInfo->str[0]
+
+                      set_field_buffer(createDatabaseInfo.field2[3], 0, createDatabaseInfo.str[1]);
+                      set_field_buffer(createDatabaseInfo.field2[6], 0, createDatabaseInfo.str[2]);
+
+/*
+0 1 2
+3 4 5
+6 7 8
+9 10 11
+
+
+*/
+
+//                    set_field_buffer(createDatabaseInfo.field2[0], 0, createDatabaseInfo.str[0]);
+//                    set_current_field(createDatabaseInfo.form, createDatabaseInfo.field2[1]);
+//                    set_field_buffer(createDatabaseInfo.field2[1], 0, createDatabaseInfo.str[1]);
+//
+//                    set_current_field(createDatabaseInfo.form, createDatabaseInfo.field2[0]);
+
                     show_panel((&createDatabaseInfo)->panel);
                     cmd = manageCreateDatabase( &createDatabaseInfo , &serverConnectInfo);
                     closePanel( &createDatabaseInfo ,&queryInfo ,&resultInfo  );
@@ -466,6 +492,9 @@ void buildInfo(struct AppInfo   *appInfo ,  int fieldSize,char *label,  int yPlu
 //            }
         }
     }
+
+
+
     appInfo->field2[appInfo->numberOfFields] = NULL;
 //    appInfo->field[0] = new_field(4, appInfo->fieldSize, 1, 1, 0, 0);
 //    appInfo->field[1] = NULL;

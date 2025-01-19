@@ -33,6 +33,19 @@ void createDatabaseSetup(struct AppInfo   *appInfo){
             }
         }
     }
+
+
+  field_opts_off(appInfo->field2[3], O_ACTIVE);
+  field_opts_off(appInfo->field2[6], O_ACTIVE);
+    if(appInfo->isCreateDB){
+//      field_opts_off(appInfo->field2[6], O_VISIBLE);
+//      field_opts_off(appInfo->field2[7], O_VISIBLE);
+//      field_opts_off(appInfo->field2[8], O_VISIBLE);
+//      field_opts_off(appInfo->field2[3], O_ACTIVE);
+//      field_opts_off(appInfo->field2[6], O_ACTIVE);
+    }
+
+
     post_form(appInfo->form);
 	wrefresh(appInfo->win);
     set_current_field(appInfo->form, appInfo->field2[0]);
