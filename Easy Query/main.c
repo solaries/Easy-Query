@@ -212,8 +212,8 @@ int main()
             case 2  :
                 { //Server Connection Is selected serverConnectInfo->str[0]
 
-                      set_field_buffer(createDatabaseInfo.field2[3], 0, createDatabaseInfo.str[1]);
-                      set_field_buffer(createDatabaseInfo.field2[6], 0, createDatabaseInfo.str[2]);
+                      set_field_buffer(createDatabaseInfo.field2[3], 0, createDatabaseInfo.str[0]);
+                      set_field_buffer(createDatabaseInfo.field2[6], 0, createDatabaseInfo.str[1]);
 
 /*
 0 1 2
