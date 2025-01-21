@@ -4,7 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <panel.h>
-
+//XXXXXXXXXXXXXXXXXXX
 
 //static char* trim_whitespaces(char *str)
 //{
