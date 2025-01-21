@@ -6,27 +6,27 @@
 #include <panel.h>
 
 
-static char* trim_whitespaces(char *str)
-{
-	char *end;
-	// trim leading space
-	while(isspace(*str))
-		str++;
-
-	if(*str == 0) // all spaces?
-		return str;
-
-	// trim trailing space
-	end = str + strnlen(str, 128) - 1;
-
-	while(end > str && isspace(*end))
-		end--;
-
-	// write new null terminator
-	*(end+1) = '\0';
-
-	return str;
-}
+//static char* trim_whitespaces(char *str)
+//{
+//	char *end;
+//	// trim leading space
+//	while(isspace(*str))
+//		str++;
+//
+//	if(*str == 0) // all spaces?
+//		return str;
+//
+//	// trim trailing space
+//	end = str + strnlen(str, 128) - 1;
+//
+//	while(end > str && isspace(*end))
+//		end--;
+//
+//	// write new null terminator
+//	*(end+1) = '\0';
+//
+//	return str;
+//}
 void setLocations( struct AppInfo   *appInfo , int rowCount , int  charCount , int  rowCur , int  colCur  , int  charCur  ,int curField );
 
 void setupQueryField( struct AppInfo   *appInfo){
@@ -68,6 +68,9 @@ int manageQueryField( struct AppInfo   *appInfo){
         form_driver(appInfo->form, REQ_NEXT_CHAR);
     }
     int countt = 0;
+
+
+
     while((ch = wgetch(appInfo->win)) != 0)
     {	switch(ch)
         {
@@ -501,7 +504,6 @@ int manageQueryField( struct AppInfo   *appInfo){
 //                    if(!(appInfo->numberOfRows == 1   &&  charCount < colSize -1)){
 //                         mvprintw(21, 0, "UUUUUUUUUUUUU" );
 //                    }
-                    int oldColCur = colCur;
 
                     if((ch >=32 && ch <=126 && ((appInfo->numberOfRows > 1) || (appInfo->numberOfRows == 1   &&  charCount < colSize -1)) )){
                         bool doMovenext = false;
@@ -531,12 +533,9 @@ int manageQueryField( struct AppInfo   *appInfo){
                             mvprintw(19, 0, "-   ", theTextCurrent);
                         }
                         charCount +=1;
-
                         charCur +=1;
-                        rowCur = ((charCount -1) / colSize) + 1  ;
+                        rowCur = ((charCur -1) / colSize) + 1  ;
                         rowCount = (charCount / colSize) +1  ;
-
- mvprintw(20, 70, "D-%d", colCur);
                         if((charCur   )% colSize ==0){
                             colCur = colSize;
                         }
@@ -549,34 +548,7 @@ int manageQueryField( struct AppInfo   *appInfo){
                         else{
                             form_driver(appInfo->form, ch);
                         }
-
-
-                        form_driver(appInfo->form, REQ_VALIDATION);
-                        char * theTextCurrent2=  trim_whitespaces(field_buffer(appInfo->field2[curField], 0)) ;
-                        int actualCharCount = strlen(theTextCurrent2)  ;
-                        if(actualCharCount > charCount){
-                            bool changeCol = false;
-                            changeCol = oldColCur ==charCount;
-                            mvprintw(21, 70, "*A-%d-%d-", charCount, actualCharCount);
-                            charCount = actualCharCount;
-                            charCur = actualCharCount -1;
-                            rowCur = ((charCount -1) / colSize) + 1  ;
-                            rowCount = (charCount / colSize) +1  ;
-                            if(changeCol ){
-                                colCur = ((charCur ) % colSize) + 1;
-                            }
-                        }
-                        else{
-                            mvprintw(21, 70, "A-%d-%d-", charCount, actualCharCount);
-                        }
-                        mvprintw(22, 70, "B-%d-%d", actualCharCount,rowCount);
-
-                        refresh();
-
                     }
-
-
-
                     mvprintw(23, 75, "%d", ch);
                     mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d ", colSize , rowCount , charCount ,rowCur  , colCur );
                     refresh();
@@ -595,9 +567,6 @@ int manageQueryField( struct AppInfo   *appInfo){
 //        char * theCurrentTextValue= field_buffer(appInfo->field2[curField], 0) ;
         appInfo->str[( curField / 3)] = field_buffer(appInfo->field2[curField], 0);
        form_driver(appInfo->form, '\0');
-
-                    mvprintw(21, 0, "c size: %d ,r count: %d ,char count: %d ,row cur: %d ,col Cur: %d %d ", colSize , rowCount , charCount ,rowCur  , colCur,charCur );
-                    refresh();
 
     }
     return 0;
