@@ -532,6 +532,31 @@ int manageQueryField( struct AppInfo   *appInfo){
                             }
                             mvprintw(19, 0, "-   ", theTextCurrent);
                         }
+
+                        if( colSize == colCur && ch !=32){
+                            int positionInWholeText = ((rowCur - 1) * colSize) + colCur;
+                            form_driver(appInfo->form, REQ_VALIDATION);
+                            char * theTextCurrent= field_buffer(appInfo->field2[curField], 0) ;
+                            int charForSplitCount =0;
+                            for(int i = positionInWholeText  -2  ;i > positionInWholeText - colSize - 1 ;i--){
+                                if(theTextCurrent[i]==32){
+                                    break;
+                                }
+                                else{
+                                    charForSplitCount += 1;
+                                }
+                            }
+
+                            mvprintw(19, 70, "--%d", charForSplitCount);
+                            refresh();
+
+
+                            charCount +=charForSplitCount;
+                            charCur +=charForSplitCount;
+                            colCur++;
+                            colCur++;
+                        }
+
                         charCount +=1;
                         charCur +=1;
                         rowCur = ((charCur -1) / colSize) + 1  ;
