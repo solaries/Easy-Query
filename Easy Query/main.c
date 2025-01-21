@@ -21,6 +21,9 @@
 #include "Unique.h"
 #include "Update.h"
 #include "FieldInfo.h"
+
+#include "DB_com.h"
+
 #include <form.h>
 #include <panel.h>
 
@@ -30,8 +33,14 @@
 #include <string.h>
 #include <ctype.h>
 
-#define WIDTH 30
-#define HEIGHT 12
+//#define WIDTH 30
+//#define HEIGHT 12
+
+
+
+// sudo apt-get install libmysqlclient-dev
+
+//  gcc -o connect_mysql $(mysql_config --cflags) connect_mysql.c $(mysql_config --libs)
 
 void win_show(WINDOW *win, char *label, int label_color);
 void print_in_middle(WINDOW *win, int starty, int startx, int width, char *string, chtype color);
@@ -101,7 +110,7 @@ int main()
 
     *resultInfo.isPassword[0] = false;
     resultInfo.isCreateDB = false;
-    buildInfo(&resultInfo  , 75,"Result...",10);
+    buildInfo(&resultInfo  , 75,"Result...",9);
     resultSetup( &resultInfo );
 
 	refresh();
@@ -216,6 +225,15 @@ int main()
                       set_field_buffer(createDatabaseInfo.field2[6], 0, createDatabaseInfo.str[1]);
 
 /*
+0 localhost server
+1 root user
+2 lordisjesus password
+3 database
+
+*/
+
+
+/*
 0 1 2
 3 4 5
 6 7 8
@@ -233,6 +251,18 @@ int main()
                     show_panel((&createDatabaseInfo)->panel);
                     cmd = manageCreateDatabase( &createDatabaseInfo , &serverConnectInfo);
                     closePanel( &createDatabaseInfo ,&queryInfo ,&resultInfo  );
+                }
+                break;
+            case 55555  :
+                { //esc
+                    int v = createDatabase(
+                    (&createDatabaseInfo)->str[0] /*char *server*/ ,
+                    (&createDatabaseInfo)->str[1] /*char *user*/ ,
+                    (&createDatabaseInfo)->str[2] /*char *password*/ ,
+                    (&createDatabaseInfo)->str[3] /*char *database*/  );
+                    v = 1 + v;
+
+                    cmd = manageQuery( &queryInfo ) ;
                 }
                 break;
             case 27  :

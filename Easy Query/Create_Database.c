@@ -81,7 +81,7 @@ int manageCreateDatabase(struct AppInfo   *appInfo , struct AppInfo   *config   
                 break;
             case 5  :
                 { //ctrl + E
-//                    return ch;
+                    return 55555;
                 }
                 break;
 

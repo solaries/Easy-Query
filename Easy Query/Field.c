@@ -454,7 +454,13 @@ int manageQueryField( struct AppInfo   *appInfo){
         }
         setLocations(  appInfo ,  rowCount , charCount , rowCur , colCur  , charCur  , curField  );
         form_driver(appInfo->form, REQ_VALIDATION);
-        appInfo->str[( curField / 3)] = field_buffer(appInfo->field2[curField], 0);
+        if(appInfo->isCreateDB){
+            appInfo->str[( 3)] = field_buffer(appInfo->field2[curField], 0);
+        }
+        else{
+            appInfo->str[( curField / 3)] = field_buffer(appInfo->field2[curField], 0);
+        }
+
         form_driver(appInfo->form, '\0');
     }
     return 0;

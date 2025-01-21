@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1737304779 source:/home/sphinx/code/c_programs/easy_query/Easy Query/main.c
+1737492180 source:/home/sphinx/code/c_programs/easy_query/Easy Query/main.c
 	<stdio.h>
 	<stdlib.h>
 	"Connect_To_Database.h"
@@ -23,6 +23,7 @@
 	"Unique.h"
 	"Update.h"
 	"FieldInfo.h"
+	"DB_com.h"
 	<form.h>
 	<panel.h>
 	<ncurses.h>
@@ -89,7 +90,7 @@
 1735241857 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Connect_To_Database.c
 	"Connect_To_Database.h"
 
-1737302960 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Create_Database.c
+1737476980 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Create_Database.c
 	"Create_Database.h"
 	"Field.h"
 	<form.h>
@@ -105,7 +106,7 @@
 1735242367 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Delete.c
 	"Delete.h"
 
-1737460066 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Field.c
+1737491432 source:/home/sphinx/code/c_programs/easy_query/Easy Query/Field.c
 	"Field.h"
 	"FieldInfo.h"
 	<form.h>
@@ -169,4 +170,12 @@
 1737299196 /home/sphinx/code/c_programs/easy_query/Easy Query/FieldInfo.h
 	<panel.h>
 	<form.h>
+
+1737493580 source:/home/sphinx/code/c_programs/easy_query/Easy Query/DB_com.c
+	<string.h>
+	<ctype.h>
+	<mysql.h>
+	"DB_com.h"
+
+1737487535 /home/sphinx/code/c_programs/easy_query/Easy Query/DB_com.h
 
