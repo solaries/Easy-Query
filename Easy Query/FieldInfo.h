@@ -44,6 +44,8 @@ struct AppInfo {
 };
 
 
+char* trim_whitespaces(char *str);
+
 #endif // FIELDINFO_H_INCLUDED
 
 

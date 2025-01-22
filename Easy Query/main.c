@@ -208,8 +208,13 @@ int main()
     prepLocationAndPassword(&messageInfo  ,   1) ;
     *messageInfo.isPassword[0] = false;
     messageInfo.isCreateDB = false;
-    buildInfo(&messageInfo  , 40,"Message...",5);
+    buildInfo(&messageInfo  , 60,"Message...",5);
     messageSetup( &messageInfo );
+
+
+    field_opts_off((&messageInfo)->field2[0], O_ACTIVE);
+    set_field_fore((&messageInfo)->field2[0], COLOR_PAIR(1));
+    set_field_back((&messageInfo)->field2[0], COLOR_PAIR(1));
 
 //getch();
 
@@ -279,14 +284,20 @@ int main()
                 break;
             case 55555  :
                 { //esc
-                    char*  returnMessage = createDatabase(
+
+                    messageInfo.str[0] = createDatabase(
                     (&createDatabaseInfo)->str[0] /*char *server*/ ,
                     (&createDatabaseInfo)->str[1] /*char *user*/ ,
                     (&createDatabaseInfo)->str[2] /*char *password*/ ,
                     (&createDatabaseInfo)->str[3] /*char *database*/  );
-//                    v = 1 + v;
+//                    v = 1;
 
-                    cmd = manageQuery( &queryInfo ) ;
+                    show_panel((&messageInfo)->panel);
+                    box((&messageInfo)->win, 0, 0);
+                    cmd = manageMessage( &messageInfo ) ;
+                    closePanel( &messageInfo ,&queryInfo ,&resultInfo  );
+
+//                    cmd = manageQuery( &queryInfo ) ;
                 }
                 break;
             case 27  :
