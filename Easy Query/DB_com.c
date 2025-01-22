@@ -31,12 +31,13 @@ static char* trim_whitespaces(char *str)
 }
 
 
-int createDatabase(char *server,  char *user, char *password, char *database ) {
+char* createDatabase(char *server,  char *user, char *password, char *database ) {
 	MYSQL *conn;
 //	MYSQL_RES *res;
 //	MYSQL_ROW row;
 
 //	char *server = "localhost";
+	char sql[256];
 
 //    int l0 = strlen(trim_whitespaces(server) );
 //    int l1= strlen(server1);
@@ -46,22 +47,34 @@ int createDatabase(char *server,  char *user, char *password, char *database ) {
 //	char *database = "code_joh";
 
 	conn = mysql_init(NULL);
+    char* return_message ;
 
 	/* Connect to database */
 //	if (!mysql_real_connect(conn, server, user, password,  database, 0, NULL, 0)) {
 	if (!mysql_real_connect(conn,trim_whitespaces(server) ,trim_whitespaces(user) ,trim_whitespaces(password) ,  NULL, 0, NULL, 0)) {
         char error_message[256];
+//        char* error_message ;
         strcpy(error_message, mysql_error(conn));
+        return_message =  trim_whitespaces(error_message) ;
 //        char * err = mysql_error(conn);
 		//fprintf(stderr, "%s\n", mysql_error(conn));
-		return 1;
+		return return_message;
 	}
 
+    strcpy(sql , "create database ");
+    strcat(sql, trim_whitespaces(database) );
+    char *sqlExec = trim_whitespaces(sql);
+
 //	/* send SQL query */
-//	if (mysql_query(conn, "show tables")) {
+	if (mysql_query(conn, sqlExec)) {
 //		fprintf(stderr, "%s\n", mysql_error(conn));
 //		exit(1);
-//	}
+        char error_message[256];
+        strcpy(error_message, mysql_error(conn));
+        return_message =  trim_whitespaces(error_message);
+        mysql_close(conn);
+        return return_message;
+	}
 //
 //	res = mysql_use_result(conn);
 //
@@ -74,7 +87,8 @@ int createDatabase(char *server,  char *user, char *password, char *database ) {
 //	/* close connection */
 //	mysql_free_result(res);
 	mysql_close(conn);
-	return 0;
+    return_message ="Database creation successful";
+	return return_message;
 }
 
 // /home/sphinx/code/c_programs/easy_query/Easy Query/DB_com.c|1|fatal error: mysql.h: No such file or directory|

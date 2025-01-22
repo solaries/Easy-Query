@@ -13,6 +13,7 @@
 #include "Menu.h"
 #include "Panel.h"
 #include "Query.h"
+#include "Message.h"
 #include "Result_Text_Or_Cells.h"
 #include "Select.h"
 #include "Server_Connection.h"
@@ -187,12 +188,35 @@ int main()
     createDatabaseSetup( &createDatabaseInfo );
 
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+    struct AppInfo messageInfo;
+    messageInfo.numberOfFields = 1;
+    messageInfo.numberOfRows = 4;
+    messageInfo.windXPosition = 5;
+    messageInfo.fieldXPosition = 1;
+    messageInfo.str = malloc(1 * sizeof(char *));
+    prepLocationAndPassword(&messageInfo  ,   1) ;
+    *messageInfo.isPassword[0] = false;
+    messageInfo.isCreateDB = false;
+    buildInfo(&messageInfo  , 40,"Message...",5);
+    messageSetup( &messageInfo );
 
 //getch();
 
     hide_panel((&menuInfo)->panel);
     hide_panel((&serverConnectInfo)->panel);
     hide_panel((&createDatabaseInfo)->panel);
+    hide_panel((&messageInfo)->panel);
     update_panels();
     doupdate();
 
@@ -255,12 +279,12 @@ int main()
                 break;
             case 55555  :
                 { //esc
-                    int v = createDatabase(
+                    char*  returnMessage = createDatabase(
                     (&createDatabaseInfo)->str[0] /*char *server*/ ,
                     (&createDatabaseInfo)->str[1] /*char *user*/ ,
                     (&createDatabaseInfo)->str[2] /*char *password*/ ,
                     (&createDatabaseInfo)->str[3] /*char *database*/  );
-                    v = 1 + v;
+//                    v = 1 + v;
 
                     cmd = manageQuery( &queryInfo ) ;
                 }

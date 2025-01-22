@@ -19,6 +19,7 @@
 					<Add library="ncurses" />
 					<Add library="form" />
 					<Add library="panel" />
+					<Add library="mysqlclient" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -55,6 +56,13 @@
 		<Unit filename="Create_Table.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="DB_com">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="DB_com.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="DB_com.h" />
 		<Unit filename="Datatype.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -104,6 +112,10 @@
 		<Unit filename="Menu.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="Message.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Message.h" />
 		<Unit filename="Panel.c">
 			<Option compilerVar="CC" />
 		</Unit>
