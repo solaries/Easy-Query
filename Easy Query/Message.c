@@ -8,8 +8,8 @@
 
 void messageSetup(struct AppInfo   *appInfo){
 	//set_field_back(field[0], A_UNDERLINE);
-    field_opts_off(appInfo->field2[0], O_AUTOSKIP);
-    set_field_opts(appInfo->field2[0], O_VISIBLE | O_PUBLIC  | O_WRAP   );
+    field_opts_off(appInfo->field2[0], O_AUTOSKIP | O_WRAP  );
+    set_field_opts(appInfo->field2[0], O_VISIBLE  | O_PUBLIC );
 
 
 
@@ -24,19 +24,29 @@ void messageSetup(struct AppInfo   *appInfo){
 
 
 
-int manageMessage(struct AppInfo   *appInfo){
+int manageMessage(struct AppInfo   *appInfo,char* info){
     int ch;
-    set_field_buffer(appInfo->field2[0], 0,  trim_whitespaces(appInfo->str[0])  );
+//    char* info = trim_whitespaces(appInfo->str[0]);
+    set_field_buffer(appInfo->field2[0], 0,  info  );
 //    set_current_field(appInfo->form, appInfo->field2[0]);
 
 
 //    mvprintw(22, 0, "Ctrl + Q or ESC: Query,  Ctrl + E : Execute,   Ctrl + R: Result" );
-    mvprintw(22, 0, "ESC: Query                                                         " );
+    mvprintw(22, 0, "ESC 1: Query                                                         " );
 //    mvprintw(23, 0, "Ctrl + W: Menu,  Alt + X: Exit, Space: toggle Select" );
     mvprintw(23, 0, "                                                                   " );
+    mvprintw(21, 0, "                                                                   " );
 
 
 
+        form_driver(appInfo->form, REQ_END_FIELD);
+
+        form_driver(appInfo->form, REQ_NEXT_CHAR);
+        form_driver(appInfo->form, REQ_NEXT_CHAR);
+        form_driver(appInfo->form, REQ_NEXT_CHAR);
+        form_driver(appInfo->form, REQ_NEXT_CHAR);
+
+    refresh();
 
 //    while((ch = manageQueryField( appInfo)) !=0)
     while((ch =  wgetch(appInfo->win)  ) !=0)

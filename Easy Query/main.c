@@ -294,7 +294,7 @@ int main()
 
                     show_panel((&messageInfo)->panel);
                     box((&messageInfo)->win, 0, 0);
-                    cmd = manageMessage( &messageInfo ) ;
+                    cmd = manageMessage( &messageInfo, messageInfo.str[0] ) ;
                     closePanel( &messageInfo ,&queryInfo ,&resultInfo  );
 
 //                    cmd = manageQuery( &queryInfo ) ;
