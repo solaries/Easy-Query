@@ -126,7 +126,8 @@ int main()
     serverConnectInfo.numberOfRows = 1;
     serverConnectInfo.windXPosition = 3;
     serverConnectInfo.fieldXPosition = 12;
-    serverConnectInfo.str = malloc(3 * sizeof(char *));
+    serverConnectInfo.str = malloc(8 * sizeof(char *)); /* 1 - server, 2 - user, 3 - password, 4 - database,
+                                                5 - active server, 6 - active user, 7 - active password, 8 - active  database, */
     serverConnectInfo.labels = malloc(3 * sizeof(char *));
     prepLocationAndPassword(&serverConnectInfo  ,   3) ;
     *serverConnectInfo.isPassword[0] = false;
@@ -250,6 +251,11 @@ int main()
             case 2  :
                 { //Server Connection Is selected serverConnectInfo->str[0]
 
+//                    int  rows, cols;
+//                    scale_form((&createDatabaseInfo)->form, &rows, &cols);
+//                      print_in_middle((&createDatabaseInfo)->win, 1, 0, cols + 4, "Create Database...    ", COLOR_PAIR(1));
+
+
                       set_field_buffer(createDatabaseInfo.field2[3], 0, createDatabaseInfo.str[0]);
                       set_field_buffer(createDatabaseInfo.field2[6], 0, createDatabaseInfo.str[1]);
 
@@ -276,6 +282,21 @@ int main()
 //                    set_field_buffer(createDatabaseInfo.field2[1], 0, createDatabaseInfo.str[1]);
 //
 //                    set_current_field(createDatabaseInfo.form, createDatabaseInfo.field2[0]);
+                    (&createDatabaseInfo)->isCreateDB = true;
+                    show_panel((&createDatabaseInfo)->panel);
+                    cmd = manageCreateDatabase( &createDatabaseInfo , &serverConnectInfo);
+                    closePanel( &createDatabaseInfo ,&queryInfo ,&resultInfo  );
+                }
+                break;
+            case 3  :
+                {
+//                    int  rows, cols;
+//                    scale_form((&createDatabaseInfo)->form, &rows, &cols);
+//                    print_in_middle((&createDatabaseInfo)->win, 1, 0, cols + 4, "Connect To Database...", COLOR_PAIR(1));
+
+                    set_field_buffer(createDatabaseInfo.field2[3], 0, createDatabaseInfo.str[0]);
+                    set_field_buffer(createDatabaseInfo.field2[6], 0, createDatabaseInfo.str[1]);
+                    (&createDatabaseInfo)->isCreateDB = false;
 
                     show_panel((&createDatabaseInfo)->panel);
                     cmd = manageCreateDatabase( &createDatabaseInfo , &serverConnectInfo);
@@ -285,11 +306,37 @@ int main()
             case 55555  :
                 { //esc
 
-                    messageInfo.str[0] = createDatabase(
-                    (&createDatabaseInfo)->str[0] /*char *server*/ ,
-                    (&createDatabaseInfo)->str[1] /*char *user*/ ,
-                    (&createDatabaseInfo)->str[2] /*char *password*/ ,
-                    (&createDatabaseInfo)->str[3] /*char *database*/  );
+//                    messageInfo.str[0] = createDatabase(
+//                    (&createDatabaseInfo)->str[0] /*char *server*/ ,
+//                    (&createDatabaseInfo)->str[1] /*char *user*/ ,
+//                    (&createDatabaseInfo)->str[2] /*char *password*/ ,
+//                    (&createDatabaseInfo)->str[3] /*char *database*/  );
+
+                    messageInfo.str[0] = createDatabase(&createDatabaseInfo) ;
+//                    v = 1;
+
+                    show_panel((&messageInfo)->panel);
+                    box((&messageInfo)->win, 0, 0);
+                    cmd = manageMessage( &messageInfo, messageInfo.str[0] ) ;
+                    closePanel( &messageInfo ,&queryInfo ,&resultInfo  );
+
+//                    cmd = manageQuery( &queryInfo ) ;
+                }
+                break;
+            case 55551  :
+                { //esc
+
+//                    messageInfo.str[0] = connectDatabase(
+//                    (&createDatabaseInfo)->str[0] /*char *server*/ ,
+//                    (&createDatabaseInfo)->str[1] /*char *user*/ ,
+//                    (&createDatabaseInfo)->str[2] /*char *password*/ ,
+//                    (&createDatabaseInfo)->str[3] /*char *database*/  );
+
+
+
+
+                    messageInfo.str[0] = connectDatabase(&createDatabaseInfo) ;
+
 //                    v = 1;
 
                     show_panel((&messageInfo)->panel);

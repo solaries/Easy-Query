@@ -10,7 +10,8 @@
 
 
 
-char* createDatabase(char *server,  char *user, char *password, char *database ) {
+//char* createDatabase(char *server,  char *user, char *password, char *database ) {
+char* createDatabase(struct AppInfo   *appInfo) {
 	MYSQL *conn;
 //	MYSQL_RES *res;
 //	MYSQL_ROW row;
@@ -25,12 +26,26 @@ char* createDatabase(char *server,  char *user, char *password, char *database )
 //	char *password1 = "lordisjesus"; /* set me first */
 //	char *database = "code_joh";
 
+
+/*
+
+
+messageInfo.str[0] = connectDatabase(
+(&createDatabaseInfo)->str[0] /-char *server-/ ,
+(&createDatabaseInfo)->str[1] /-char *user-/ ,
+(&createDatabaseInfo)->str[2] /-char *password-/ ,
+(&createDatabaseInfo)->str[3] /-char *database-/  );
+//                    v = 1;
+
+*/
+
+
 	conn = mysql_init(NULL);
     char* return_message ;
 
 	/* Connect to database */
 //	if (!mysql_real_connect(conn, server, user, password,  database, 0, NULL, 0)) {
-	if (!mysql_real_connect(conn,trim_whitespaces(server) ,trim_whitespaces(user) ,trim_whitespaces(password) ,  NULL, 0, NULL, 0)) {
+	if (!mysql_real_connect(conn,trim_whitespaces( appInfo->str[0]) ,trim_whitespaces(appInfo->str[1]) ,trim_whitespaces(appInfo->str[2]) ,  NULL, 0, NULL, 0)) {
         char error_message[256];
 //        char* error_message ;
         strcpy(error_message, mysql_error(conn));
@@ -41,7 +56,7 @@ char* createDatabase(char *server,  char *user, char *password, char *database )
 	}
 
     strcpy(sql , "create database ");
-    strcat(sql, trim_whitespaces(database) );
+    strcat(sql, trim_whitespaces(trim_whitespaces(appInfo->str[3])) );
     char *sqlExec = trim_whitespaces(sql);
 
 //	/* send SQL query */
@@ -69,6 +84,30 @@ char* createDatabase(char *server,  char *user, char *password, char *database )
     return_message ="Database creation successful";
 	return return_message;
 }
+
+
+
+
+//char* connectDatabase(char *server,  char *user, char *password, char *database ) {
+char* connectDatabase(struct AppInfo   *appInfo ) {
+	MYSQL *conn;
+//	char sql[256];
+	conn = mysql_init(NULL);
+    char* return_message ;
+//	if (!mysql_real_connect(conn,trim_whitespaces(server) ,trim_whitespaces(user) ,trim_whitespaces(password) ,  NULL, 0, NULL, 0)) {
+	if (!mysql_real_connect(conn,trim_whitespaces( appInfo->str[0]) ,trim_whitespaces(appInfo->str[1]) ,trim_whitespaces(appInfo->str[2]) ,  trim_whitespaces(appInfo->str[3]), 0, NULL, 0)) {
+        char error_message[256];
+        strcpy(error_message, mysql_error(conn));
+        return_message =  trim_whitespaces(error_message) ;
+		return return_message;
+	}
+	mysql_close(conn);
+    return_message ="Database connection successful";
+	return return_message;
+}
+
+
+
 
 // /home/sphinx/code/c_programs/easy_query/Easy Query/DB_com.c|1|fatal error: mysql.h: No such file or directory|
 

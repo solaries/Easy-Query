@@ -32,7 +32,7 @@ int manageMessage(struct AppInfo   *appInfo,char* info){
 
 
 //    mvprintw(22, 0, "Ctrl + Q or ESC: Query,  Ctrl + E : Execute,   Ctrl + R: Result" );
-    mvprintw(22, 0, "ESC 1: Query                                                         " );
+    mvprintw(22, 0, "ESC: Query                                                         " );
 //    mvprintw(23, 0, "Ctrl + W: Menu,  Alt + X: Exit, Space: toggle Select" );
     mvprintw(23, 0, "                                                                   " );
     mvprintw(21, 0, "                                                                   " );

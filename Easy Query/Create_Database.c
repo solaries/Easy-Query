@@ -81,7 +81,12 @@ int manageCreateDatabase(struct AppInfo   *appInfo , struct AppInfo   *config   
                 break;
             case 5  :
                 { //ctrl + E
-                    return 55555;
+                    if(appInfo->isCreateDB){
+                        return 55555;
+                    }
+                    else{
+                        return 55551;
+                    }
                 }
                 break;
 
