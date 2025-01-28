@@ -431,7 +431,7 @@ int main()
 	unpost_form(createDatabaseInfo.form);
 	free_form(createDatabaseInfo.form);
 
-    free(createDatabaseInfo.str);
+    //free(createDatabaseInfo.str);
     free(createDatabaseInfo.labels);
     freeLocationAndPassword(&createDatabaseInfo , 3);
 	delwin(createDatabaseInfo.win);

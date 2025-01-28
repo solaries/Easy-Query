@@ -21,6 +21,7 @@ struct AppInfo {
 	char **str  ;
 	bool **isPassword  ;
 	bool  isCreateDB  ;
+	bool  isConnectedToDB  ;
 
 
 
