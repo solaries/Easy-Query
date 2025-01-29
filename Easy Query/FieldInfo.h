@@ -19,6 +19,7 @@ struct AppInfo {
 //	FIELD *field[2] ;
 	int fieldSize;
 	char **str  ;
+	char **databases  ;
 	bool **isPassword  ;
 	bool  isCreateDB  ;
 	bool  isConnectedToDB  ;
@@ -46,6 +47,18 @@ struct AppInfo {
 
 
 char* trim_whitespaces(char *str);
+
+
+
+
+
+//static  int startx = 0;
+//static int starty = 0;
+//
+//static char *choices[] ;
+
+
+
 
 #endif // FIELDINFO_H_INCLUDED
 

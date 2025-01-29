@@ -75,6 +75,9 @@
 		<Unit filename="Delete.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="FIeldInfo.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="Field.c">
 			<Option compilerVar="CC" />
 		</Unit>

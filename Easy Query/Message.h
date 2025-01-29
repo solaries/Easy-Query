@@ -9,7 +9,7 @@
 
 
     void messageSetup( struct AppInfo *appInfo);
-    int manageMessage( struct AppInfo *appInfo,char* info);
+    int manageMessage( struct AppInfo *appInfo );
 
 
 

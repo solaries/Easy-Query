@@ -5,10 +5,10 @@
 #define WIDTH 30
 #define HEIGHT 12
 
-int startx = 0;
-int starty = 0;
+static int startx = 0;
+static int starty = 0;
 
-char *choices[] = {
+static char *choices[] = {
 			"Server Connection  ",
 			"Create Database    ",
 			"Connect to Database",
@@ -20,9 +20,9 @@ char *choices[] = {
 			"Exit               ",
 		  };
 
-int n_choices = sizeof(choices) / sizeof(char *);
-void print_menu(struct AppInfo   *appInfo, int highlight );
+static int n_choices = sizeof(choices) / sizeof(char *);
 
+static void print_menu(struct AppInfo   *appInfo, int highlight );
 
 void menuSetup(struct AppInfo   *appInfo){
 

@@ -24,10 +24,10 @@ void messageSetup(struct AppInfo   *appInfo){
 
 
 
-int manageMessage(struct AppInfo   *appInfo,char* info){
+int manageMessage(struct AppInfo   *appInfo ){
     int ch;
 //    char* info = trim_whitespaces(appInfo->str[0]);
-    set_field_buffer(appInfo->field2[0], 0,  info  );
+    set_field_buffer(appInfo->field2[0], 0, appInfo->str[0]  );
 //    set_current_field(appInfo->form, appInfo->field2[0]);
 
 

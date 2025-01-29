@@ -126,8 +126,9 @@ int main()
     serverConnectInfo.numberOfRows = 1;
     serverConnectInfo.windXPosition = 3;
     serverConnectInfo.fieldXPosition = 12;
-    serverConnectInfo.str = malloc(8 * sizeof(char *)); /* 1 - server, 2 - user, 3 - password, 4 - database,
+    serverConnectInfo.str = malloc(9 * sizeof(char *)); /* 1 - server, 2 - user, 3 - password, 4 - database,
                                                 5 - active server, 6 - active user, 7 - active password, 8 - active  database, */
+
     serverConnectInfo.labels = malloc(3 * sizeof(char *));
     prepLocationAndPassword(&serverConnectInfo  ,   3) ;
     *serverConnectInfo.isPassword[0] = false;
@@ -189,6 +190,20 @@ int main()
     createDatabaseSetup( &createDatabaseInfo );
 
 
+
+
+
+    struct AppInfo connectToDatabaseInfo;
+//    connectToDatabaseInfo.str = malloc(8 * sizeof(char *)); /* 1 - server, 2 - user, 3 - password, 4 - database,
+//                                                5 - active server, 6 - active user, 7 - active password, 8 - active  database, */
+    connectToDatabaseInfo.str  = serverConnectInfo.str;
+    connectToDatabaseInfo.databases = NULL;
+    connectToDatabaseSetup(&connectToDatabaseInfo ) ;
+
+
+
+
+
 //
 //
 //
@@ -220,6 +235,7 @@ int main()
 //getch();
 
     hide_panel((&menuInfo)->panel);
+    hide_panel((&connectToDatabaseInfo)->panel);
     hide_panel((&serverConnectInfo)->panel);
     hide_panel((&createDatabaseInfo)->panel);
     hide_panel((&messageInfo)->panel);
@@ -293,14 +309,27 @@ int main()
 //                    int  rows, cols;
 //                    scale_form((&createDatabaseInfo)->form, &rows, &cols);
 //                    print_in_middle((&createDatabaseInfo)->win, 1, 0, cols + 4, "Connect To Database...", COLOR_PAIR(1));
+//
+//                    set_field_buffer(createDatabaseInfo.field2[3], 0, createDatabaseInfo.str[0]);
+//                    set_field_buffer(createDatabaseInfo.field2[6], 0, createDatabaseInfo.str[1]);
+//                    (&createDatabaseInfo)->isCreateDB = false;
 
-                    set_field_buffer(createDatabaseInfo.field2[3], 0, createDatabaseInfo.str[0]);
-                    set_field_buffer(createDatabaseInfo.field2[6], 0, createDatabaseInfo.str[1]);
-                    (&createDatabaseInfo)->isCreateDB = false;
+                    show_panel((&connectToDatabaseInfo)->panel);
+                    cmd = manageConnectToDatabase( &connectToDatabaseInfo );//, &serverConnectInfo);
+                    closePanel( &connectToDatabaseInfo ,&queryInfo ,&resultInfo  );
 
-                    show_panel((&createDatabaseInfo)->panel);
-                    cmd = manageCreateDatabase( &createDatabaseInfo , &serverConnectInfo);
-                    closePanel( &createDatabaseInfo ,&queryInfo ,&resultInfo  );
+
+
+
+                    messageInfo.str[0] = (&connectToDatabaseInfo)->strMsg ;
+
+//                    v = 1;
+
+                    show_panel((&messageInfo)->panel);
+                    box((&messageInfo)->win, 0, 0);
+                    manageMessage( &messageInfo  ) ;
+                    closePanel( &messageInfo ,&queryInfo ,&resultInfo  );
+
                 }
                 break;
             case 55555  :
@@ -317,7 +346,7 @@ int main()
 
                     show_panel((&messageInfo)->panel);
                     box((&messageInfo)->win, 0, 0);
-                    cmd = manageMessage( &messageInfo, messageInfo.str[0] ) ;
+                    cmd = manageMessage( &messageInfo  ) ;
                     closePanel( &messageInfo ,&queryInfo ,&resultInfo  );
 
 //                    cmd = manageQuery( &queryInfo ) ;
@@ -341,7 +370,7 @@ int main()
 
                     show_panel((&messageInfo)->panel);
                     box((&messageInfo)->win, 0, 0);
-                    cmd = manageMessage( &messageInfo, messageInfo.str[0] ) ;
+                    cmd = manageMessage( &messageInfo  ) ;
                     closePanel( &messageInfo ,&queryInfo ,&resultInfo  );
 
 //                    cmd = manageQuery( &queryInfo ) ;
